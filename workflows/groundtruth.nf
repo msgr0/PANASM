@@ -37,17 +37,17 @@ process BLAST {
     outmix = meta.id + "." + "mix"
     // mapping_file = output + ".mapping.tsv"
     mix_gt = outmix + ".gt.tsv"
-    pan_mix_gt = output + ".pan.gt.tsv"
+    pan_mix_gt = outmix + ".pan.gt.tsv"
 
     outuni = meta.id + "." + "uni"
     // mapping_file = output + ".mapping.tsv"
     uni_gt = outuni + ".gt.tsv"
-    pan_uni_gt = output + ".pan.gt.tsv"
+    pan_uni_gt = outuni + ".pan.gt.tsv"
 
     outske = meta.id + "." + "ske"
     // mapping_file = output + ".mapping.tsv"
     ske_gt = outske + ".gt.tsv"
-    pan_ske_gt = output + ".pan.gt.tsv"
+    pan_ske_gt = outske + ".pan.gt.tsv"
     
     """
     python $projectDir/bin/evaluation/build_truth.py --input --pangenome ${graph} --assembly ${mix} --reference ${reference} --output ${outmix}
