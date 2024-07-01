@@ -127,7 +127,7 @@ process PBF{
     python ${putils} gc_probabilities --input_file ${input_csv} --out_dir . --tmp_dir ./tmp
 
 
-    python ${pflow} ${penalty} -alpha4 1 -ag ${graph}.gz -gc ${gc_content} -out_dir . -out_file ${bins}  -score ${pbf_pred} -assembler ${assembler} -seed_len ${seed_len}  -seed_score ${seed_score} -min_pls_len ${min_pls_len}
+    python ${pflow} -ag ${graph}.gz -gc ${gc_content} -out_dir . -out_file ${bins}  -score ${pbf_pred} -assembler ${assembler} -seed_len ${seed_len}  -seed_score ${seed_score} -min_pls_len ${min_pls_len}
 
 
     python $projectDir/bin/evaluation/transform_pbf_pred.py --input ${bins} --gfa ${gfa} --output ${res} 
