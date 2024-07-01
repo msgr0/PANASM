@@ -15,7 +15,7 @@ include { GPLASPAN; GPLASUNI; GPLASSKE  } from "./workflows/gplas.nf"
 //     c. PBF pangenome (only on pangenome graphs)
 include { PBFPANSTAR; PBFPAN; PBF as PBFUNI; PBF as PBFSKE } from "./workflows/pbf.nf"
 
-include {PUBLISH } from "./utils.nf"
+include {PUBLISH } from "./workflows/utils.nf"
 
 // 5. EVALUATE (GT, predition) for Unic, Skesa, Pangenome(U) and Pangenome(S)
 // include { EVALUATE } from "./workflows.evaluate.nf"
