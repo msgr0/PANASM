@@ -70,7 +70,7 @@ process GPLASUNI {
   
     gplas -c predict -i ${ren_gfa} -P ${gplas_pred} -n ${meta.id}.u
     
-    python $projectDir/bin/evaluation/transform_gplas_pred.py --input ${bins} --gfa ${ren_gfa} --output ${res} 
+    python $projectDir/bin/evaluation/transform_gplas_pred.py --input ${bins} --gfa ${ren_gfa} --output ${res} --prefix 'uni'
 
     """
 
@@ -111,7 +111,7 @@ process GPLASSKE {
 
     gplas -c predict -i ${ren_gfa} -P ${gplas_pred} -n ${meta.id}.s
 
-    python $projectDir/bin/evaluation/transform_gplas_pred.py --input ${bins} --gfa ${ren_gfa} --output ${res} 
+    python $projectDir/bin/evaluation/transform_gplas_pred.py --input ${bins} --gfa ${ren_gfa} --output ${res} --prefix 'ske'
     """
 }
 
