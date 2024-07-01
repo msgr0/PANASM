@@ -11,5 +11,6 @@ process PUBLISH {
     
     script:
     """
+    touch ${item}
     """
 }
