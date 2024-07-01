@@ -27,7 +27,7 @@ workflow {
     // take input data folder
     // read a pair of files, assembly s and assembly u
 
-    thresholds = Channel.of('0', '150', '250', '500')
+    thresholds = Channel.of(0, 150, 250, 500)
     input_ch = Channel.fromFilePairs(
         "${params.input}/*-S*-{s,u}.gfa.gz", type: 'file'
     )
@@ -45,11 +45,15 @@ workflow {
     }
     // adding thresholds
     input_ch = input_ch.combine(thresholds)
+
+
     input_ch = input_ch.map {
         meta, files, thr ->
-        meta.id = meta.id + "-${thr}"
-        [meta + [thr:thr], files]
-    }
+        meta = meta+[thr:thr]
+        meta.id += "-${thr}"
+        [meta, files]
+    } | view
+    
     // extracting unicycler assembly
     uni_ch = input_ch.map {
         meta, files ->
@@ -63,7 +67,7 @@ workflow {
         [meta, ske[0]]
     }
     // getting the actual input channel
-    input_ch = uni_ch.join(ske_ch) | view
+    input_ch = uni_ch.join(ske_ch)
 
     input_ch | PANASSEMBLY
 
@@ -76,7 +80,7 @@ workflow {
     // todo DE-Couple build-gt and NCBI, ncbi will be ran before buildGT
     // and download the assembly just once per sample instead of once
     // per SAMPLE-THRESHOLD
-    build_ch = pasm_ch.join(mixed_fasta_ch.map{id, fa, fagz -> [id, fa]}).join(assembly_fa_ch) | view
+    build_ch = pasm_ch.join(mixed_fasta_ch.map{id, fa, fagz -> [id, fa]}).join(assembly_fa_ch)
     BUILD_GT(build_ch)
 
     // if no results form BUILDGT, it will hopefully exit here
