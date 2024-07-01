@@ -44,7 +44,8 @@ workflow {
         [fmeta, files]
     }
     // adding thresholds
-    input_ch = input_ch.combine(thresholds).map {
+    input_ch = input_ch.combine(thresholds)
+    input_ch = input_ch.map {
         meta, files, thr ->
         meta.id = meta.id + "-${thr}"
         [meta + [thr:thr], files]
