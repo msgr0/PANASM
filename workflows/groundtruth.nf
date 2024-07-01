@@ -28,12 +28,12 @@ process NCBI {
 process BLAST {
 
     input:
-    tuple val(meta), val(graph), val(mix), val(uni), val(ske), val(reference)
+    tuple val(meta), path(graph), path(mix), path(uni), path(ske), path(reference)
 
     output:
-    tuple val(meta), val(pan_mix_gt), val(mix_gt), emit: pangt
-    tuple val(meta), val(pan_uni_gt), val(uni_gt), emit: unigt
-    tuple val(meta), val(pan_ske_gt), val(ske_gt), emit: skegt
+    tuple val(meta), path(pan_mix_gt), path(mix_gt), emit: pangt
+    tuple val(meta), path(pan_uni_gt), path(uni_gt), emit: unigt
+    tuple val(meta), path(pan_ske_gt), path(ske_gt), emit: skegt
 
 
     script:

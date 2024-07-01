@@ -8,9 +8,5 @@ process PUBLISH {
     
     output:
     tuple val(meta), path(item)
-    
-    script:
-    """
-    touch ${item}
-    """
+
 }
