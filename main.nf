@@ -102,7 +102,6 @@ workflow {
     PBFSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske), "s")
 
 
-gppanuni_ch.mix(gpuni_ch).mix(gppanske_ch).mix(gpske_ch)
     ////////////////////// uni gplas
 
     gppanuni_ch = tuple(GPLASPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
