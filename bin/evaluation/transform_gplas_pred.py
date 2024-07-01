@@ -31,7 +31,8 @@ def main(args):
             except:
                 raise Exception("Could not retrive the bin name-type")
                 sys.exit(1)
-        contig = str(args.prefix) + str(row["number"])
+        contig = str(row["number"])
+        out_contig = str(args.prefix) + contig
         contig_len = -1
         try:
             contig_len = graph.line(contig).LN
@@ -50,7 +51,7 @@ def main(args):
                 print(contig)
                 sys.exit(1)
 
-        out_prediction.loc[len(out_prediction)] = [plasmid, contig, contig_len]
+        out_prediction.loc[len(out_prediction)] = [plasmid, out_contig, contig_len]
 
     out_prediction.to_csv(args.output, index=False, sep="\t")
 
