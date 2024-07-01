@@ -49,7 +49,7 @@ process PREPROCESS {
 process MAKEPANGENOME {
     maxForks 1 
     input:
-    tuple val(meta), path(mixed_fagz)
+    tuple val(meta), path(mixfagz)
 
     output:
     tuple val(meta), path(pangenome), emit: pangenome
