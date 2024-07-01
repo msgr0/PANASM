@@ -28,10 +28,17 @@ def main(args):
     df_pbf = pd.DataFrame(columns=["contig", "pscore"])
 
     gfa = gp.Gfa.from_file(graph)
+    flag_g = False
+    flag_p = False
+    if output != None and output != "":
+        flag_g = True
+    if pbf != None and pbf != "":
+        flag_p = True
+    assert flag_p != flag_p
 
     for frag in gfa.segments:
         # contig_list = frag.cl.split(",")
-        contig = frag.name  # DOESNT HAVE uni or ske if GPLAS
+        contig_n = frag.name  # DOESNT HAVE uni or ske if GPLAS
         # ncontigs = len(contig_list)
         prob_chromo = 0
         prob_plas = 0
@@ -39,41 +46,41 @@ def main(args):
         # for contig in contig_list:
         # print(contig)
         # eliminated ske-uni prefix
+        if flag_p:
+            contig = str(frag.name)
+        elif flag_g:
+            contig = prefix + str(frag.name)
         try:
-            mlpred.loc[
-                mlpred["Contig_name"] == f"{prefix}{contig}", "Prediction"
-            ].values[0]
-
+            mlpred.loc[mlpred["Contig_name"] == contig, "Prediction"].values[0]
         except Exception as e:
             continue
 
-        label = mlpred.loc[
-            mlpred["Contig_name"] == str(f"{prefix}{contig}"), "Prediction"
-        ].values[0]
+        label = mlpred.loc[mlpred["Contig_name"] == contig, "Prediction"].values[0]
         prob_chromo = mlpred.loc[
-            mlpred["Contig_name"] == str(f"{prefix}{contig}"), "Prob_Chromosome"
+            mlpred["Contig_name"] == contig, "Prob_Chromosome"
         ].values[0]
-        prob_plas = mlpred.loc[
-            mlpred["Contig_name"] == str(f"{prefix}{contig}"), "Prob_Plasmid"
-        ].values[0]
+        prob_plas = mlpred.loc[mlpred["Contig_name"] == contig, "Prob_Plasmid"].values[
+            0
+        ]
         # labeling = mlpred.loc[mlpred[3] == contig, 2].values[0]
+        if flag_g:
+            name = f"S{contig}_LN:i:{frag.LN}_dp:f:{frag.dp}"
 
-        name = f"S{contig}_LN:i:{frag.LN}_dp:f:{frag.dp}"
+            df.loc[len(df)] = {
+                "Prob_Chromosome": prob_chromo,
+                "Prob_Plasmid": prob_plas,
+                "Prediction": label,
+                "Contig_name": name,
+                "Contig_length": length,
+            }
 
-        df.loc[len(df)] = {
-            "Prob_Chromosome": prob_chromo,
-            "Prob_Plasmid": prob_plas,
-            "Prediction": label,
-            "Contig_name": name,
-            "Contig_length": length,
-        }
-
-        if pbf != None:
+        if flag_p:
             df_pbf.loc[len(df_pbf)] = {"contig": contig, "pscore": prob_plas}
 
-    if pbf != None:
+    if flag_p:
         df_pbf.to_csv(pbf, sep="\t", index=False, header=False)
-    df.to_csv(output, sep="\t", index=False)
+    if flag_g:
+        df.to_csv(output, sep="\t", index=False)
 
 
 if __name__ == "__main__":

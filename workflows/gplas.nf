@@ -15,7 +15,6 @@ process GPLASPAN {
     script:
     slim_graph = "${meta.id}.slim.gfa"
     gplas_pred = "${meta.id}.pasm.gplas.pred"
-    pbf_pred = "${meta.id}.pasm.pbf.pred"
 
     bins    = "results/${meta.id}.pasm_bins.tab"
     results = "results/${meta.id}.pasm_results.tab"
@@ -27,7 +26,7 @@ process GPLASPAN {
 
     python $projectDir/bin/easy-pangenome.py --input ${gfa} --output ${slim_graph}
 
-    python $projectDir/bin/mlpl.asmtopan.py --pred ${pred} --graph ${gfa}  --output ${gplas_pred} --pbf ${pbf_pred}
+    python $projectDir/bin/mlpl.asmtopan.py --pred ${pred} --graph ${gfa}  --output ${gplas_pred}
 
     gplas -c predict -i ${slim_graph} -P ${gplas_pred} -n ${meta.id}.pasm
 
@@ -54,7 +53,6 @@ process GPLASUNI {
     ren_fasta = "${meta.name}.u.ren.fasta"
 
     gplas_pred = "${meta.name}.u.gplas.pred"
-    pbf_pred = "${meta.name}.u.pbf.pred"
 
     bins    = "results/${meta.name}.u_bins.tab"
     results = "results/${meta.name}.u_results.tab"
@@ -69,12 +67,12 @@ process GPLASUNI {
 
     awk '/^S/{print ">"\$2; print ""\$3}' ${ren_gfa} > ${ren_fasta}
 
-    python $projectDir/bin/mlpl.asm.py --pred ${pred} --graph ${ren_gfa}  --output ${gplas_pred} --pbf ${pbf_pred} --prefix uni
+    python $projectDir/bin/mlpl.asm.py --pred ${pred} --graph ${ren_gfa}  --output ${gplas_pred} --prefix uni
 
   
     gplas -c predict -i ${ren_gfa} -P ${gplas_pred} -n ${meta.name}.u
     
-    python $projectDir/bin/evaluation/transform_gplas_pred.py --input ${bins} --gfa ${gfa} --output ${res} 
+    python $projectDir/bin/evaluation/transform_gplas_pred.py --input ${bins} --gfa ${ren_gfa} --output ${res} 
 
     """
 
@@ -96,7 +94,6 @@ process GPLASSKE {
     ren_fasta = "${meta.id}.s.ren.fasta"
 
     gplas_pred = "${meta.id}.s.gplas.pred"
-    pbf_pred = "${meta.id}.s.pbf.pred"
 
     bins    = "results/${meta.id}.s_bins.tab"
     results = "results/${meta.id}.s_results.tab"
@@ -112,11 +109,11 @@ process GPLASSKE {
     python $projectDir/bin/rename_gfa.py --input ${gfa} --convert --output ${ren_gfa} --prefix ""
     awk '/^S/{print ">"\$2; print ""\$3}' ${ren_gfa} > ${ren_fasta}
 
-    python $projectDir/bin/mlpl.asm.py --pred ${pred} --graph ${ren_gfa}  --output ${gplas_pred} --pbf ${pbf_pred} --prefix ske
+    python $projectDir/bin/mlpl.asm.py --pred ${pred} --graph ${ren_gfa}  --output ${gplas_pred} --prefix ske
 
     gplas -c predict -i ${ren_gfa} -P ${gplas_pred} -n ${meta.id}.s
 
-    python $projectDir/bin/evaluation/transform_gplas_pred.py --input ${bins} --gfa ${gfa} --output ${res} 
+    python $projectDir/bin/evaluation/transform_gplas_pred.py --input ${bins} --gfa ${ren_gfa} --output ${res} 
     """
 }
 
