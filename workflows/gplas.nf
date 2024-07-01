@@ -69,7 +69,7 @@ process GPLASUNI {
 
     awk '/^S/{print ">"\$2; print ""\$3}' ${ren_gfa} > ${ren_fasta}
 
-    python $projectDir/bin/mlpl.asm.py --pred ${pred} --graph ${ren_gfa}  --output ${gplas_pred} --pbf ${pbf_pred}
+    python $projectDir/bin/mlpl.asm.py --pred ${pred} --graph ${ren_gfa}  --output ${gplas_pred} --pbf ${pbf_pred} --prefix uni
 
   
     gplas -c predict -i ${ren_gfa} -P ${gplas_pred} -n ${meta.name}.u
@@ -112,7 +112,7 @@ process GPLASSKE {
     python $projectDir/bin/rename_gfa.py --input ${gfa} --convert --output ${ren_gfa} --prefix ""
     awk '/^S/{print ">"\$2; print ""\$3}' ${ren_gfa} > ${ren_fasta}
 
-    python $projectDir/bin/mlpl.asm.py --pred ${pred} --graph ${ren_gfa}  --output ${gplas_pred} --pbf ${pbf_pred}
+    python $projectDir/bin/mlpl.asm.py --pred ${pred} --graph ${ren_gfa}  --output ${gplas_pred} --pbf ${pbf_pred} --prefix ske
 
     gplas -c predict -i ${ren_gfa} -P ${gplas_pred} -n ${meta.id}.s
 

@@ -10,6 +10,7 @@ def main(args):
     graph = args.graph
     output = args.output
     pbf = args.pbf
+    prefix = args.prefix
 
     mlpred_head = [
         "Prob_Chromosome",
@@ -30,29 +31,34 @@ def main(args):
 
     for frag in gfa.segments:
         # contig_list = frag.cl.split(",")
-        contig = frag.name
+        contig = frag.name  # DOESNT HAVE uni or ske if GPLAS
         # ncontigs = len(contig_list)
         prob_chromo = 0
         prob_plas = 0
         length = frag.LN if frag.LN != None else len(frag.sequence)
         # for contig in contig_list:
         # print(contig)
+        # eliminated ske-uni prefix
         try:
-            mlpred.loc[mlpred["Contig_name"] == contig, "Prediction"].values[0]
+            mlpred.loc[
+                mlpred["Contig_name"] == f"{prefix}{contig}", "Prediction"
+            ].values[0]
 
         except Exception as e:
             continue
 
-        label = mlpred.loc[mlpred["Contig_name"] == str(contig), "Prediction"].values[0]
+        label = mlpred.loc[
+            mlpred["Contig_name"] == str(f"{prefix}{contig}"), "Prediction"
+        ].values[0]
         prob_chromo = mlpred.loc[
-            mlpred["Contig_name"] == str(contig), "Prob_Chromosome"
+            mlpred["Contig_name"] == str(f"{prefix}{contig}"), "Prob_Chromosome"
         ].values[0]
         prob_plas = mlpred.loc[
-            mlpred["Contig_name"] == str(contig), "Prob_Plasmid"
+            mlpred["Contig_name"] == str(f"{prefix}{contig}"), "Prob_Plasmid"
         ].values[0]
         # labeling = mlpred.loc[mlpred[3] == contig, 2].values[0]
 
-        name = f"S{frag.name}_LN:i:{frag.LN}_dp:f:{frag.dp}"
+        name = f"S{contig}_LN:i:{frag.LN}_dp:f:{frag.dp}"
 
         df.loc[len(df)] = {
             "Prob_Chromosome": prob_chromo,
@@ -75,7 +81,10 @@ if __name__ == "__main__":
 
     parser.add_argument("--pred", "-p", help="mlplasmid asm pred")
     parser.add_argument("--graph", "-g", help="pangenome_graph convert mlplas into")
-    parser.add_argument("--output", "-o", help="output")
+    parser.add_argument(
+        "--prefix", "-p", help="prefix to add when matching, used for gplas"
+    )
+    parser.add_argument("--output", "-o", help="gplas output mode")
     parser.add_argument("--pbf", help="pbf output mode")
     args = parser.parse_args()
     main(args)
