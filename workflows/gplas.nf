@@ -44,7 +44,7 @@ process GPLASUNI {
     tuple val(meta), path(gfa), path(pred)
 
     output:
-    tuple val(meta), path(bins), emit: res
+    tuple val(meta), path(res), emit: res
 
     script:
     ren_gfa = "${meta.id}.u.ren.gfa"
@@ -85,7 +85,7 @@ process GPLASSKE {
     tuple val(meta), path(gfa), path(pred)
 
     output:
-    tuple val(meta), path(bins), emit: res
+    tuple val(meta), path(res), emit: res
 
     script:
     ren_gfa = "${meta.id}.s.ren.gfa"

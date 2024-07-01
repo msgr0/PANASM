@@ -47,7 +47,9 @@ process PREPROCESS {
 }
 
 process MAKEPANGENOME {
-    maxForks 1 
+    maxForks 4
+    time '30m'
+
     input:
     tuple val(meta), path(mixfagz)
 

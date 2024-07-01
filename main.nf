@@ -1,5 +1,4 @@
 #!/usr/bin/env nextflow
-
 // DESCRIPTION:
 // this workflows is intended to run 
 // 1. PAN_ASSEMBLY on an intended threshold,
@@ -27,7 +26,8 @@ workflow {
     // take input data folder
     // read a pair of files, assembly s and assembly u
 
-    thresholds = Channel.of(0, 150, 250, 500)
+    // thresholds = Channel.of(0, 150, 250, 500)
+    thresholds = Channel.of(params.thr)
     input_ch = Channel.fromFilePairs(
         "${params.input}/*-S*-{s,u}.gfa.gz", type: 'file'
     )
