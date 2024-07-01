@@ -14,11 +14,14 @@ process NCBI {
     script:
     referencegz = "${meta.id}.fna.gz"
     reference = "${meta.id}.fna"
+    reference_ren = "${meta.id}.ren.fna"
 
     id = "${meta.id}".split("-")[0]
     """
     python $projectDir/bin/evaluation/ncbi_link.py --input ${id} --output ${referencegz}
     bgzip -d -c ${referencegz} > ${reference}
+
+    python $projectDir/bin/evaluation/strip_plasmid_fasta.py --input ${reference} --output ${reference_ren}
     """
 }
 
@@ -58,6 +61,11 @@ process BLAST {
     python $projectDir/bin/evaluation/build_truth.py --pangenome ${graph} --assembly ${ske} --reference ${reference} --output ${outske}
     """
 
+}
+
+process RENAME_FNA {
+    input:
+    tuple val(meta), path(reference)
 }
 
 
