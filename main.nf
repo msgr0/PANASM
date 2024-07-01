@@ -14,6 +14,9 @@ include { GPLASPAN; GPLASUNI; GPLASSKE  } from "./workflows/gplas.nf"
 //     b. PBF
 //     c. PBF pangenome (only on pangenome graphs)
 include { PBFPANSTAR; PBFPAN; PBF as PBFUNI; PBF as PBFSKE } from "./workflows/pbf.nf"
+
+include {PUBLISH } from "./utils.nf"
+
 // 5. EVALUATE (GT, predition) for Unic, Skesa, Pangenome(U) and Pangenome(S)
 // include { EVALUATE } from "./workflows.evaluate.nf"
 // 6. PLOT (Unicyler, Pangenome(U)) PLOT (Skesa, Pangenome)
@@ -24,7 +27,7 @@ workflow {
     // take input data folder
     // read a pair of files, assembly s and assembly u
 
-    thresholds = Channel.of('0')
+    thresholds = Channel.of('0', '150', '250', '500')
     input_ch = Channel.fromFilePairs(
         "${params.input}/*-S*-{s,u}.gfa.gz", type: 'file'
     )
@@ -89,6 +92,15 @@ workflow {
     PBFPANSTAR(pasm_ch.join(MLPLASMIDS.out.mixed))
     PBFUNI(assembly_ch.map{id, uni, ske -> [id, uni]}.join(MLPLASMIDS.out.uni), "u")
     PBFSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske), "s")
+
+    GPLASPAN.out.res &
+    GPLASUNI.out.res &
+    GPLASSKE.out.res &
+    PBFPAN.out.res &
+    PBFPANSTAR.out.res &
+    PBFUNI.out.res &
+    PBFSKE.out.res
+    | PUBLISH
 
 
 

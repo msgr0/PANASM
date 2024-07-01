@@ -21,6 +21,9 @@ def convert_species(spec) {
 }
 
 process MLPLASMIDS {
+    errorStrategy 'ignore'
+
+
     input:
     tuple val(meta), path(mixed), path(uni), path(ske)
 

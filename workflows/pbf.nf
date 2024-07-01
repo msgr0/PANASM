@@ -1,7 +1,11 @@
 #!/usr/bin/env nextflow
 binfolder = "~/bin"
+
 process PBFPAN {
     // NOT include penalty term, as the assembly
+
+    errorStrategy 'ignore'
+
     input:
     tuple val(meta), path(graph), path(pred)
 
@@ -43,6 +47,8 @@ process PBFPAN {
 
 process PBFPANSTAR {
     // include the penalty term for pangenomes
+    errorStrategy 'ignore'
+
 
     input:
     tuple val(meta), path(graph), path(pred)
@@ -83,6 +89,8 @@ process PBFPANSTAR {
 }
 
 process PBF{
+    errorStrategy 'ignore'
+
     input:
     tuple val(meta), path(graph), path(pred)
     val (asm)

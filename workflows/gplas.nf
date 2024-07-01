@@ -2,7 +2,6 @@
 
 process GPLASPAN {
 
-    cache 'lenient'
     errorStrategy 'ignore'
     maxForks 1
     input:
@@ -37,7 +36,6 @@ process GPLASPAN {
 }
 
 process GPLASUNI {
-    cache 'lenient'
     errorStrategy 'ignore'
     maxForks 1
 
@@ -49,14 +47,14 @@ process GPLASUNI {
     tuple val(meta), path(bins), emit: bins
 
     script:
-    ren_gfa = "${meta.name}.u.ren.gfa"
-    ren_fasta = "${meta.name}.u.ren.fasta"
+    ren_gfa = "${meta.id}.u.ren.gfa"
+    ren_fasta = "${meta.id}.u.ren.fasta"
 
-    gplas_pred = "${meta.name}.u.gplas.pred"
+    gplas_pred = "${meta.id}.u.gplas.pred"
 
-    bins    = "results/${meta.name}.u_bins.tab"
-    results = "results/${meta.name}.u_results.tab"
-    images = "results/${meta.name}.u_plasmidome_network.png"
+    bins    = "results/${meta.id}.u_bins.tab"
+    results = "results/${meta.id}.u_results.tab"
+    images = "results/${meta.id}.u_plasmidome_network.png"
 
     res = "${meta.id}.u.gplas.pred.tab"
 
@@ -70,7 +68,7 @@ process GPLASUNI {
     python $projectDir/bin/mlpl.asm.py --pred ${pred} --graph ${ren_gfa}  --output ${gplas_pred} --prefix uni
 
   
-    gplas -c predict -i ${ren_gfa} -P ${gplas_pred} -n ${meta.name}.u
+    gplas -c predict -i ${ren_gfa} -P ${gplas_pred} -n ${meta.id}.u
     
     python $projectDir/bin/evaluation/transform_gplas_pred.py --input ${bins} --gfa ${ren_gfa} --output ${res} 
 
@@ -79,7 +77,7 @@ process GPLASUNI {
 }
 
 process GPLASSKE {
-    cache 'lenient'
+
     errorStrategy 'ignore'
     maxForks 1
 
