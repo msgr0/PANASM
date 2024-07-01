@@ -48,7 +48,6 @@ process PREPROCESS {
 
 process MAKEPANGENOME {
     maxForks 4
-    cpus '16'
     time '30m'
 
     input:

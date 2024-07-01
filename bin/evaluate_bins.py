@@ -57,6 +57,7 @@ def parser():
     # parser.add_argument("--gfa", help="Input gfa file containing the pangenome")
     parser.add_argument("--output", help="Output folder")
     parser.add_argument("--plot", help="Plot the results", action="store_true")
+    parser.add_argument("--description", "-d", help="Description")
 
     return parser.parse_args()
 
@@ -187,9 +188,9 @@ def main():
             order=alt.Order("type", sort="ascending"),
             column="sample",
         )
-        .properties(title=f"[PRED_LABEL] (Plasmid SCORE")
+        .properties(title=f"{args.description}")
     )
-    chart.save(f"{args.output}.pred.scores.plasmids.pdf")
+    chart.save(f"{args.output}.scores.pdf")
 
     if args.output:
         with open(f"{args.output}.stats.txt", "w", encoding="utf8") as f:

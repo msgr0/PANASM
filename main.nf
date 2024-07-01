@@ -14,6 +14,8 @@ include { GPLASPAN; GPLASUNI; GPLASSKE  } from "./workflows/gplas.nf"
 //     c. PBF pangenome (only on pangenome graphs)
 include { PBFPANSTAR; PBFPAN; PBF as PBFUNI; PBF as PBFSKE } from "./workflows/pbf.nf"
 
+include { EVALUATE } from "./workflows/evaluation.nf"
+
 include {PUBLISH } from "./workflows/utils.nf"
 
 // 5. EVALUATE (GT, predition) for Unic, Skesa, Pangenome(U) and Pangenome(S)
@@ -100,6 +102,58 @@ workflow {
     PBFSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske), "s")
 
 
+gppanuni_ch.mix(gpuni_ch).mix(gppanske_ch).mix(gpske_ch)
+    ////////////////////// uni gplas
+
+    gppanuni_ch = tuple(GPLASPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
+    "gplas.pan.uni")
+    
+    gpuni_ch = tuple(GPLASUNI.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, uni]}),
+    "gplas.uni")
+
+    ///////////////////// ske gplas
+    
+    gppanske_ch = tuple(GPLASPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}),
+    "gplas.pan.ske")
+    
+    gpske_ch = tuple(GPLASSKE.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, ske]}),
+    "gplas.ske")
+
+
+    ///////////////////// uni pbf
+
+    pbfpanuni_ch = tuple(PBFPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
+    "pbf.pan.uni")
+    
+    pbfstarpanuni_ch = tuple(PBFPANSTAR.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
+    "pbf.panstar.uni")
+    
+    pbfuni_ch = tuple(PBFUNI.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, uni]}),
+    "pbf.uni")
+
+    ///////////////////// ske pbf
+    pbfpanske_ch = tuple(PBFPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}),
+    "pbf.pan.ske")
+
+    pbfstarpanske_ch = tuple(PBFPANSTAR.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}),
+    "pbf.panstar.ske")
+
+    pbfske_ch = tuple(PBFSKE.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, ske]}),
+    "pbf.ske")
+
+    EVALUATE(gppanuni_ch.mix(gpuni_ch,
+    gppanske_ch, gpske_ch,
+    pbfpanuni_ch, pbfstarpanuni_ch, pbfuni_ch,
+    pbfpanske_ch, pbfstarpanske_ch,pbfske_ch))
+
+    // WORKFLOW
+
+    // input_ch | PANASSEMBLY
+
+    // build the pangenome with panassembly
+
+    // run mlplasmids
+
 
     GPLASPAN.out.res.mix(
         GPLASUNI.out.res.mix(
@@ -113,17 +167,8 @@ workflow {
                 )
             )
         )
-    ) | PUBLISH
+    )
+    | PUBLISH
 
-
-
-
-    // WORKFLOW
-
-    // input_ch | PANASSEMBLY
-
-    // build the pangenome with panassembly
-
-    // run mlplasmids
 
 }
