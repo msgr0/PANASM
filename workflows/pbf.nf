@@ -65,6 +65,8 @@ process PBFPANSTAR {
     bins = "${meta.id}.${asm}.pbf.bins.tsv"
     res = "${meta.id}.${asm}.pbf.pred.tab"
     asm_pred = "null.pred"
+    pbf_pred = "${meta.id}.${asm}.pbf.pred"
+
 
     """
     python $projectDir/bin/mlpl.asmtopan.py --pred ${pred} --graph ${graph}  --output ${asm_pred} --pbf ${pbf_pred}
@@ -112,6 +114,8 @@ process PBF{
         assembler = "skesa"
     }
     asm_pred = "null.pred"
+    pbf_pred = "${meta.id}.${asm}.pbf.pred"
+
 
     """
     python $projectDir/bin/mlpl.asm.py --pred ${pred} --graph ${graph}  --output ${asm_pred} --pbf ${pbf_pred}
