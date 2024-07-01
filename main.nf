@@ -72,7 +72,7 @@ workflow {
     // todo DE-Couple build-gt and NCBI, ncbi will be ran before buildGT
     // and download the assembly just once per sample instead of once
     // per SAMPLE-THRESHOLD
-    BUILD_GT(pasm_ch.join(mixed_fasta_ch.map{id, fa, fagz -> [id, fagz]}).join(assembly_fa_ch))
+    BUILD_GT(pasm_ch.join(mixed_fasta_ch.map{id, fa, fagz -> [id, fa]}).join(assembly_fa_ch))
 
     // if no results form BUILDGT, it will hopefully exit here
     MLPLASMIDS(mixed_fasta_ch.map{id, fa, fagz -> [id, fagz]}.join(assembly_fa_ch)) // each sample at a certain threshold will have his prediction done here
