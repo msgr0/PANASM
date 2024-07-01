@@ -14,7 +14,6 @@ process GPLASPAN {
 
     script:
     slim_graph = "${meta.id}.slim.gfa"
-    species = convert_species(meta.species)
     gplas_pred = "${meta.id}.pasm.gplas.pred"
     pbf_pred = "${meta.id}.pasm.pbf.pred"
 
@@ -53,7 +52,6 @@ process GPLASUNI {
     script:
     ren_gfa = "${meta.name}.u.ren.gfa"
     ren_fasta = "${meta.name}.u.ren.fasta"
-    species = convert_species(meta.species)
 
     gplas_pred = "${meta.name}.u.gplas.pred"
     pbf_pred = "${meta.name}.u.pbf.pred"
@@ -97,7 +95,6 @@ process GPLASSKE {
     ren_gfa = "${meta.id}.s.ren.gfa"
     ren_fasta = "${meta.id}.s.ren.fasta"
 
-    species = convert_species(meta.species)
     gplas_pred = "${meta.id}.s.gplas.pred"
     pbf_pred = "${meta.id}.s.pbf.pred"
 
