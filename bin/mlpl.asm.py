@@ -30,11 +30,12 @@ def main(args):
     gfa = gp.Gfa.from_file(graph)
     flag_g = False
     flag_p = False
+
     if output != None and output != "":
         flag_g = True
     if pbf != None and pbf != "":
         flag_p = True
-    assert flag_p != flag_p
+    assert flag_p != flag_g
 
     for frag in gfa.segments:
         # contig_list = frag.cl.split(",")
