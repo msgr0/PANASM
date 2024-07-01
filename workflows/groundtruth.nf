@@ -9,7 +9,7 @@ process NCBI {
     val (meta)
 
     output:
-    tuple val(meta), path(reference), emit: ref
+    tuple val(meta), path(reference_ren), emit: ref
 
     script:
     referencegz = "${meta.id}.fna.gz"
