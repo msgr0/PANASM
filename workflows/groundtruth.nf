@@ -63,11 +63,6 @@ process BLAST {
 
 }
 
-process RENAME_FNA {
-    input:
-    tuple val(meta), path(reference)
-}
-
 
 workflow BUILD_GT {
     take:
