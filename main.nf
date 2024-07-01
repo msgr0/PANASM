@@ -14,7 +14,16 @@ include { GPLASPAN; GPLASUNI; GPLASSKE  } from "./workflows/gplas.nf"
 //     c. PBF pangenome (only on pangenome graphs)
 include { PBFPANSTAR; PBFPAN; PBF as PBFUNI; PBF as PBFSKE } from "./workflows/pbf.nf"
 
-include { EVALUATE } from "./workflows/evaluation.nf"
+include { EVALUATE as EVAL1 } from "./workflows/evaluation.nf"
+include { EVALUATE as EVAL2 } from "./workflows/evaluation.nf"
+include { EVALUATE as EVAL3 } from "./workflows/evaluation.nf"
+include { EVALUATE as EVAL4 } from "./workflows/evaluation.nf"
+include { EVALUATE as EVAL5 } from "./workflows/evaluation.nf"
+include { EVALUATE as EVAL6 } from "./workflows/evaluation.nf"
+include { EVALUATE as EVAL7 } from "./workflows/evaluation.nf"
+include { EVALUATE as EVAL8 } from "./workflows/evaluation.nf"
+include { EVALUATE as EVAL9 } from "./workflows/evaluation.nf"
+include { EVALUATE as EVAL10 } from "./workflows/evaluation.nf"
 
 include {PUBLISH } from "./workflows/utils.nf"
 
@@ -104,46 +113,51 @@ workflow {
 
     ////////////////////// uni gplas
 
-    gppanuni_ch = tuple(GPLASPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
+    // gppanuni_ch = 
+    EVAL1(GPLASPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
     "gplas.pan.uni")
     
-    gpuni_ch = tuple(GPLASUNI.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, uni]}),
+    // gpuni_ch =
+    EVAL2(GPLASUNI.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, uni]}),
     "gplas.uni")
 
     ///////////////////// ske gplas
     
-    gppanske_ch = tuple(GPLASPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}),
+    // gppanske_ch = 
+    EVAL3(GPLASPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}),
     "gplas.pan.ske")
     
-    gpske_ch = tuple(GPLASSKE.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, ske]}),
+    // gpske_ch =
+    EVAL4(GPLASSKE.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, ske]}),
     "gplas.ske")
 
 
     ///////////////////// uni pbf
 
-    pbfpanuni_ch = tuple(PBFPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
+    // pbfpanuni_ch =
+    EVAL5(PBFPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
     "pbf.pan.uni")
     
-    pbfstarpanuni_ch = tuple(PBFPANSTAR.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
+    // pbfstarpanuni_ch =
+    EVAL6(PBFPANSTAR.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
     "pbf.panstar.uni")
     
-    pbfuni_ch = tuple(PBFUNI.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, uni]}),
+    // pbfuni_ch =
+    EVAL7(PBFUNI.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, uni]}),
     "pbf.uni")
 
     ///////////////////// ske pbf
-    pbfpanske_ch = tuple(PBFPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}),
+    // pbfpanske_ch =
+    EVAL8(PBFPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}),
     "pbf.pan.ske")
 
-    pbfstarpanske_ch = tuple(PBFPANSTAR.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}),
+    // pbfstarpanske_ch = 
+    EVAL9(PBFPANSTAR.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}),
     "pbf.panstar.ske")
 
-    pbfske_ch = tuple(PBFSKE.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, ske]}),
+    // pbfske_ch = 
+    EVAL10(PBFSKE.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, ske]}),
     "pbf.ske")
-
-    EVALUATE(gppanuni_ch.mix(gpuni_ch,
-    gppanske_ch, gpske_ch,
-    pbfpanuni_ch, pbfstarpanuni_ch, pbfuni_ch,
-    pbfpanske_ch, pbfstarpanske_ch,pbfske_ch))
 
     // WORKFLOW
 

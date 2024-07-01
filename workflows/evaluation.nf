@@ -4,10 +4,11 @@ include { PUBLISH } from "./utils.nf"
 
 workflow EVALUATE {
     take:
-    input_ch
+    input
+    tool
 
     main:
-    EVAL(input_ch)
+    EVAL(input, tool)
     PUBLISH(EVAL.out.stats)
 
     emit:
@@ -18,7 +19,8 @@ workflow EVALUATE {
 process EVAL {
 
     input:
-    tuple val(meta), path(prediction), path(gt), val(tool)
+    tuple val(meta), path(prediction), path(gt)
+    val(tool)
 
     output:
     tuple val(meta), path(stats), emit: stats
