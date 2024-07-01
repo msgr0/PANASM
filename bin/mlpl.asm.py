@@ -81,9 +81,7 @@ if __name__ == "__main__":
 
     parser.add_argument("--pred", "-p", help="mlplasmid asm pred")
     parser.add_argument("--graph", "-g", help="pangenome_graph convert mlplas into")
-    parser.add_argument(
-        "--prefix", "-p", help="prefix to add when matching, used for gplas"
-    )
+    parser.add_argument("--prefix", help="prefix to add when matching, used for gplas")
     parser.add_argument("--output", "-o", help="gplas output mode")
     parser.add_argument("--pbf", help="pbf output mode")
     args = parser.parse_args()
