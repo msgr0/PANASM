@@ -75,7 +75,7 @@ workflow {
     BUILD_GT(pasm_ch.join(mixed_fasta_ch).map{id, fa, fagz -> [id, fagz]}.join(assembly_fa_ch))
 
     // if no results form BUILDGT, it will hopefully exit here
-    MLPLASMIDS(mixed_fasta_ch.join(assembly_fa_ch)) // each sample at a certain threshold will have his prediction done here
+    MLPLASMIDS(mixed_fasta_ch.map{id, fa, fagz -> [id, fagz]}.join(assembly_fa_ch)) // each sample at a certain threshold will have his prediction done here
 
     // DEcouple the transformation of the prediction here with a process?
     // mlplsmid --> convert --> gplas-pbf pred.
