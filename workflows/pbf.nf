@@ -130,7 +130,7 @@ process PBF{
     python ${pflow} -ag ${graph}.gz -gc ${gc_content} -out_dir . -out_file ${bins}  -score ${pbf_pred} -assembler ${assembler} -seed_len ${seed_len}  -seed_score ${seed_score} -min_pls_len ${min_pls_len}
 
 
-    python $projectDir/bin/evaluation/transform_pbf_pred.py --input ${bins} --gfa ${gfa} --output ${res} 
+    python $projectDir/bin/evaluation/transform_pbf_pred.py --input ${bins} --gfa ${graph} --output ${res} 
 
   """
 
