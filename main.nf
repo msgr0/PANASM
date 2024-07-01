@@ -24,7 +24,7 @@ workflow {
     // take input data folder
     // read a pair of files, assembly s and assembly u
 
-    thresholds = Channel.of('500')
+    thresholds = Channel.of('0')
     input_ch = Channel.fromFilePairs(
         "${params.input}/*-S*-{s,u}.gfa.gz", type: 'file'
     )
