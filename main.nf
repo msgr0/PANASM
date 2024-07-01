@@ -86,8 +86,8 @@ workflow {
 
     PBFPAN(pasm_ch.join(MLPLASMIDS.out.mixed))
     PBFPANSTAR(pasm_ch.join(MLPLASMIDS.out.mixed))
-    PBFUNI(assembly_ch.map{id, uni, ske -> [id, uni]}.join(MLPLASMIDS.out.uni), "uni")
-    PBFSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske), "ske")
+    PBFUNI(assembly_ch.map{id, uni, ske -> [id, uni]}.join(MLPLASMIDS.out.uni), "u")
+    PBFSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske), "s")
 
 
 
