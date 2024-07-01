@@ -190,7 +190,7 @@ def main():
         )
         .properties(title=f"{args.description}")
     )
-    chart.save(f"{args.output}.scores.pdf")
+    # chart.save(f"{args.output}.scores.pdf")
 
     if args.output:
         with open(f"{args.output}.stats.txt", "w", encoding="utf8") as f:

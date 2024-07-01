@@ -8,7 +8,7 @@ workflow EVALUATE {
 
     main:
     EVAL(input_ch)
-    PUBLISH(EVAL.out.stats.mix(EVAL.out.plots))
+    PUBLISH(EVAL.out.stats)
 
     emit:
     stats = EVAL.out.stats
@@ -22,13 +22,13 @@ process EVAL {
 
     output:
     tuple val(meta), path(stats), emit: stats
-    tuple val(meta), path(plots), emit: plots
+    // tuple val(meta), path(plots), emit: plots
 
     script:
 
     output = "${meta.id}-${meta.thr}.${tool}"
     description = "${meta.id}.${thr} with ${tool}"
-    plots = "${output}.scores.pdf"
+    // plots = "${output}.scores.pdf"
     stats = "${output}.stats.txt"
 
     """
