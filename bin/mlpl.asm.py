@@ -65,7 +65,7 @@ def main(args):
         ]
         # labeling = mlpred.loc[mlpred[3] == contig, 2].values[0]
         if flag_g:
-            name = f"S{contig}_LN:i:{frag.LN}_dp:f:{frag.dp}"
+            name = f"S{frag.name}_LN:i:{frag.LN}_dp:f:{frag.dp}"
 
             df.loc[len(df)] = {
                 "Prob_Chromosome": prob_chromo,

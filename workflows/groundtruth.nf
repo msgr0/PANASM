@@ -18,7 +18,7 @@ process NCBI {
     id = "${meta.id}".split("-")[0]
     """
     python $projectDir/bin/evaluation/ncbi_link.py --input ${id} --output ${referencegz}
-    bgzip -d -c ${reference} > ${referencegz}
+    bgzip -d -c ${referencegz} > ${reference}
     """
 }
 
