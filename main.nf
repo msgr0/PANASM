@@ -84,23 +84,25 @@ workflow {
     // DEcouple the transformation of the prediction here with a process?
     // mlplsmid --> convert --> gplas-pbf pred.
 
-    GPLASPAN(pasm_ch.join(MLPLASMIDS.out.mixed)) // meta, pangenome, prediction
-    GPLASUNI(assembly_ch.map{id, uni, ske -> [id, uni]}.join(MLPLASMIDS.out.uni))
-    GPLASSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske))
+    (
+        GPLASPAN(pasm_ch.join(MLPLASMIDS.out.mixed)) &// meta, pangenome, prediction
+        GPLASUNI(assembly_ch.map{id, uni, ske -> [id, uni]}.join(MLPLASMIDS.out.uni)) &
+        GPLASSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske)) &
 
-    PBFPAN(pasm_ch.join(MLPLASMIDS.out.mixed))
-    PBFPANSTAR(pasm_ch.join(MLPLASMIDS.out.mixed))
-    PBFUNI(assembly_ch.map{id, uni, ske -> [id, uni]}.join(MLPLASMIDS.out.uni), "u")
-    PBFSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske), "s")
+        PBFPAN(pasm_ch.join(MLPLASMIDS.out.mixed)) &
+        PBFPANSTAR(pasm_ch.join(MLPLASMIDS.out.mixed)) &
+        PBFUNI(assembly_ch.map{id, uni, ske -> [id, uni]}.join(MLPLASMIDS.out.uni), "u") &
+        PBFSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske), "s")
+    ) | PUBLISH
 
-    (GPLASPAN.out.res &
-    GPLASUNI.out.res &
-    GPLASSKE.out.res &
-    PBFPAN.out.res &
-    PBFPANSTAR.out.res &
-    PBFUNI.out.res &
-    PBFSKE.out.res)
-    | PUBLISH
+
+    // (GPLASPAN.out.res &
+    // GPLASUNI.out.res &
+    // GPLASSKE.out.res &
+    // PBFPAN.out.res &
+    // PBFPANSTAR.out.res &
+    // PBFUNI.out.res &
+    // PBFSKE.out.res)
 
 
 
