@@ -115,7 +115,6 @@ process PBF{
 
 
     """
-    echo asm> ${assembler}, ${asm}
     python $projectDir/bin/mlpl.asm.py --pred ${pred} --graph ${graph} --pbf ${pbf_pred}
 
     bgzip -k ${graph}

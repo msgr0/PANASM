@@ -50,12 +50,12 @@ process BLAST {
     pan_ske_gt = outske + ".pan.gt.tsv"
     
     """
-    python $projectDir/bin/evaluation/build_truth.py --input --pangenome ${graph} --assembly ${mix} --reference ${reference} --output ${outmix}
+    python $projectDir/bin/evaluation/build_truth.py --pangenome ${graph} --assembly ${mix} --reference ${reference} --output ${outmix}
     
-    python $projectDir/bin/evaluation/build_truth.py --input --pangenome ${graph} --assembly ${uni} --reference ${reference} --output ${outuni}
+    python $projectDir/bin/evaluation/build_truth.py --pangenome ${graph} --assembly ${uni} --reference ${reference} --output ${outuni}
 
         
-    python $projectDir/bin/evaluation/build_truth.py --input --pangenome ${graph} --assembly ${ske} --reference ${reference} --output ${outske}
+    python $projectDir/bin/evaluation/build_truth.py --pangenome ${graph} --assembly ${ske} --reference ${reference} --output ${outske}
     """
 
 }

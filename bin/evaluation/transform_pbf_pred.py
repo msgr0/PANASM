@@ -27,7 +27,7 @@ def main(args):
                 contig_len = graph.line(contig).LN
                 if contig_len <= 0:
                     raise Exception("contig.LN == 0")
-            except e1:  ## contig len == 0 or other error catched in e1
+            except Exception as e1:  ## contig len == 0 or other error catched in e1
                 try:
                     contig_len = len(graph.line(contig).sequence)
                     if contig_len <= 0:
