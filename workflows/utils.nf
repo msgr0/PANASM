@@ -9,4 +9,7 @@ process PUBLISH {
     output:
     tuple val(meta), path(item)
 
+    """
+    echo
+    """
 }
