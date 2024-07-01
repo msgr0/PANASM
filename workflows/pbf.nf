@@ -123,7 +123,7 @@ process PBF{
 
     bgzip -k ${graph}
     echo "sample,gfa,pls_score" > "${input_csv}"
-    echo "${meta.id},${graph}.gz,${pbf_pred}" >> "${input_csv}"
+    echo "${meta.id}.${asm},${graph}.gz,${pbf_pred}" >> "${input_csv}"
 
     python ${putils} gc_probabilities --input_file ${input_csv} --out_dir . --tmp_dir ./tmp
 
