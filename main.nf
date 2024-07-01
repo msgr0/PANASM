@@ -93,13 +93,13 @@ workflow {
     PBFUNI(assembly_ch.map{id, uni, ske -> [id, uni]}.join(MLPLASMIDS.out.uni), "u")
     PBFSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske), "s")
 
-    GPLASPAN.out.res &
+    (GPLASPAN.out.res &
     GPLASUNI.out.res &
     GPLASSKE.out.res &
     PBFPAN.out.res &
     PBFPANSTAR.out.res &
     PBFUNI.out.res &
-    PBFSKE.out.res
+    PBFSKE.out.res)
     | PUBLISH
 
 
