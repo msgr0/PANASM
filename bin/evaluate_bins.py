@@ -109,7 +109,7 @@ def main():
 
     # Read in the bin file
     header_bin = ["label", "contig", "contig_len"]
-    bin_file = pd.read_csv(args.bin, sep="\t")
+    bin_file = pd.read_csv(args.bin, sep="\t", header=0)
 
     # predicted_plasmid_length = sum(all the length in file gt, divided per plasmid_label)
 
@@ -118,14 +118,17 @@ def main():
     # bin_file.drop_duplicates(subset="contig", keep="first", inplace=True)
 
     # pred_plasmids_len = bin_file.groupby("").sum()["length"]["plasmid"]
-    gt_plasmid_length = ground_truth.groupby(by=0).max()[3]
+    gt_plasmid = ground_truth[ground_truth[0] != "chromosome"]
+    gt_plasmid_length = gt_plasmid.groupby(by=0).max()[3]
     pred_plasmid_len = bin_file.groupby(by="plasmid").sum()["contig_len"]
 
     out += f"[GROUND TRUTH]\n\n"
-    out += f"Total plasmids ground_truth length: {gt_plasmid_length} \n\n"
+    out += f"Total plasmids ground_truth length: {gt_plasmid_length} \n"
+    out += f"Sum:------------------------------: {int(gt_plasmid_length.sum())}\n\n"
 
     out += f"[PREDICTION]\n\n"
-    out += f"Total plasmids predicted length: {pred_plasmid_len} \n\n"
+    out += f"Total plasmids predicted length: {pred_plasmid_len} \n"
+    out += f"Sum:---------------------------: {int(pred_plasmid_len.sum())}\n\n"
 
     ## calculate true positives, false negatives and false positives for SCORES
     t_pos = []
