@@ -8,7 +8,7 @@ import gfapy as gfa
 
 def main(args):
     df_header = ["number", "Bin"]
-    df = pd.read_csv(args.input, sep=" ", header=0)
+    df = pd.read_csv(args.input, sep=" ")
     if args.prefix != None:
         assert args.prefix in ["uni", "ske", ""]
     else:
