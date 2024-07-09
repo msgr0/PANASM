@@ -32,8 +32,13 @@ process PREPROCESS {
     bgzip -d -c ${uni_gfa} > ${uni_orig}
     bgzip -d -c ${skesa_gfa} > ${ske_orig}
 
-    python $projectDir/bin/remove_nodes.py -i ${uni_orig} -o ${uni_trim} -t ${meta.thr}
-    python $projectDir/bin/remove_nodes.py -i ${ske_orig} -o ${ske_trim} -t ${meta.thr}
+    if [ "${meta.thr}" == 0]; then
+        cp ${uni_orig} ${uni_trim}
+        cp ${ske_orig} ${ske_trim}
+    else
+        python $projectDir/bin/remove_nodes.py -i ${uni_orig} -o ${uni_trim} -t ${meta.thr}
+        python $projectDir/bin/remove_nodes.py -i ${ske_orig} -o ${ske_trim} -t ${meta.thr}
+    fi
 
     python $projectDir/bin/rename_gfa.py -i ${uni_trim} -o ${uni_gfa_o} -p 'uni'
     python $projectDir/bin/rename_gfa.py -i ${ske_trim} -o ${ske_gfa_o} -p 'ske'

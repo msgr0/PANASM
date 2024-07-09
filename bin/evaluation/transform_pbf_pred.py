@@ -39,7 +39,7 @@ def main(args):
                         "Halted cause of length error:", e1, e2, "check your gfa file."
                     )
                     sys.exit(1)
-                out_prediction.loc[len(out_prediction)] = [plasmid, contig, contig_len]
+            out_prediction.loc[len(out_prediction)] = [plasmid, contig, contig_len]
     out_prediction.to_csv(args.output, index=False, sep="\t")
 
 

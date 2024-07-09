@@ -44,10 +44,7 @@ def main(args):
                     mlpred["Contig_name"] == str(contig), "Prob_Chromosome"
                 ].values[0]
 
-            except Exception as e:
-                print(
-                    "PREDICTION NOT COMPLETE FOR EVERY CONTIG-CHROMOSOME or PLASMID, aborting"
-                )
+            except:
                 ncontigs -= 1
                 continue
 
@@ -72,11 +69,6 @@ def main(args):
                 mlpred["Contig_name"] == str(contig), "Contig_length"
             ].values[0]
         if ncontigs == 0:
-            print(
-                "fragment",
-                frag,
-                " is not matching any contig. Check gfa and prediction.Aborting.",
-            )
             continue
 
         prob_chromo /= cumulated_l
