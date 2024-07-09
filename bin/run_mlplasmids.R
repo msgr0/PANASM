@@ -37,12 +37,11 @@ if(any(is.na(c(input_path, output_path)))){
 thresh <- ifelse(!is.na(args[3]), as.numeric(args[3]), .8)
 species <- ifelse(!is.na(args[4]), args[4], "Escherichia coli")
 full_output <- ifelse(!is.na(args[5]), args[5], FALSE)
-min_length <- ifelse(!is.na(args[6]), args[6], 1000)
 print(paste("Threshold:", thresh))
 print(paste("Species:", species))
 print(paste("Full output:", full_output))
 
-example_prediction <- plasmid_classification(path_input_file = input_path,  prob_threshold=thresh, species = species, full_output = full_output, min_length=min_length)
+example_prediction <- plasmid_classification(path_input_file = input_path,  prob_threshold=thresh, species = species, full_output = full_output)
 if (is.null(example_prediction)){
     stop("Issue with mlplasmids; please try running interactively")
 }

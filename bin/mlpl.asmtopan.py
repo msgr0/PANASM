@@ -40,29 +40,19 @@ def main(args):
             # print(contig)
             try:
 
-                mlpred.loc[
-                    mlpred["Contig_name"] == str(contig), "Prob_Chromosome"
-                ].values[0]
+                mlpred.loc[mlpred["Contig_name"] == contig, "Prob_Chromosome"].values[0]
 
             except:
                 ncontigs -= 1
                 continue
 
             prob_chromo += (
-                mlpred.loc[
-                    mlpred["Contig_name"] == str(contig), "Prob_Chromosome"
-                ].values[0]
-                * mlpred.loc[
-                    mlpred["Contig_name"] == str(contig), "Contig_length"
-                ].values[0]
+                mlpred.loc[mlpred["Contig_name"] == contig, "Prob_Chromosome"].values[0]
+                * mlpred.loc[mlpred["Contig_name"] == contig, "Contig_length"].values[0]
             )
             prob_plas += (
-                mlpred.loc[mlpred["Contig_name"] == str(contig), "Prob_Plasmid"].values[
-                    0
-                ]
-                * mlpred.loc[
-                    mlpred["Contig_name"] == str(contig), "Contig_length"
-                ].values[0]
+                mlpred.loc[mlpred["Contig_name"] == contig, "Prob_Plasmid"].values[0]
+                * mlpred.loc[mlpred["Contig_name"] == contig, "Contig_length"].values[0]
             )
             # labeling = mlpred.loc[mlpred[3] == contig, 2].values[0]
             cumulated_l += mlpred.loc[
