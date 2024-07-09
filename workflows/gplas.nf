@@ -2,7 +2,7 @@
 
 process GPLASPAN {
 
-    // errorStrategy 'ignore'
+    errorStrategy 'ignore'
     maxForks 1
     input:
     tuple val(meta), path(gfa), path(pred)
@@ -36,7 +36,7 @@ process GPLASPAN {
 }
 
 process GPLASUNI {
-    // errorStrategy 'ignore'
+    errorStrategy 'ignore'
     maxForks 1
 
 
@@ -78,7 +78,7 @@ process GPLASUNI {
 
 process GPLASSKE {
 
-    // errorStrategy 'ignore'
+    errorStrategy 'ignore'
     maxForks 1
 
     input:

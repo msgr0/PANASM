@@ -28,7 +28,7 @@ process EVAL {
 
     script:
 
-    output = "${meta.id}-${meta.thr}.${tool}"
+    output = "${meta.id}.${tool}"
     description = "${meta.id}.${meta.thr} with ${tool}"
     // plots = "${output}.scores.pdf"
     stats = "${output}.stats.txt"
