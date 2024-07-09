@@ -41,8 +41,10 @@ process MLPLASMIDS {
     mlplas_threshold = '0.5'
     species = convert_species("${meta.species}")
     """
-      Rscript $projectDir/bin/run_mlplasmids.R ${mixed} ${mixedpred} ${mlplas_threshold} '${species}' FALSE
-      Rscript $projectDir/bin/run_mlplasmids.R ${uni} ${unipred} 0.5 '${species}' FALSE
-      Rscript $projectDir/bin/run_mlplasmids.R ${ske} ${skepred} 0.5 '${species}' FALSE
+    #!/bin/bash
+
+      Rscript $projectDir/bin/run_mlplasmids.R ${mixed} ${mixedpred} ${mlplas_threshold} '${species}' TRUE
+      Rscript $projectDir/bin/run_mlplasmids.R ${uni} ${unipred} ${mlplas_threshold} '${species}' TRUE
+      Rscript $projectDir/bin/run_mlplasmids.R ${ske} ${skepred} ${mlplas_threshold} '${species}' TRUE
     """
 }
