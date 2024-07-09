@@ -43,7 +43,7 @@ process MLPLASMIDS {
     """
     #!/bin/bash
 
-      Rscript $projectDir/bin/run_mlplasmids.R ${mixed} ${mixedpred} ${mlplas_threshold} '${species}' TRUE
+      Rscript $projectDir/bin/run_mlplasmids.R ${mixed} ${mixedpred} ${mlplas_threshold} '${species}' TRUE 500
       Rscript $projectDir/bin/run_mlplasmids.R ${uni} ${unipred} ${mlplas_threshold} '${species}' TRUE
       Rscript $projectDir/bin/run_mlplasmids.R ${ske} ${skepred} ${mlplas_threshold} '${species}' TRUE
     """

@@ -20,6 +20,8 @@ def main(args):
     ]
 
     mlpred = pd.read_csv(pred, sep="\t", header=0)
+    mlpred["Contig_name"] = mlpred["Contig_name"].astype(str)
+
     # return
     df = pd.DataFrame(columns=mlpred_head)
 
@@ -28,11 +30,12 @@ def main(args):
     gfa = gp.Gfa.from_file(graph)
 
     for frag in gfa.segments:
-        contig_list = frag.cl.split(",")
+        contig_list = frag.cl.split(",")  ## ogni frammento ha per forza una contig list
         ncontigs = len(contig_list)
         prob_chromo = 0
         prob_plas = 0
         length = frag.LN if frag.LN != None else len(frag.sequence)
+        cumulated_l = 0
         for contig in contig_list:
             # print(contig)
             try:
@@ -42,22 +45,42 @@ def main(args):
                 ].values[0]
 
             except Exception as e:
+                print(
+                    "PREDICTION NOT COMPLETE FOR EVERY CONTIG-CHROMOSOME or PLASMID, aborting"
+                )
                 ncontigs -= 1
                 continue
 
-            prob_chromo += mlpred.loc[
-                mlpred["Contig_name"] == str(contig), "Prob_Chromosome"
-            ].values[0]
-            prob_plas += mlpred.loc[
-                mlpred["Contig_name"] == str(contig), "Prob_Plasmid"
-            ].values[0]
+            prob_chromo += (
+                mlpred.loc[
+                    mlpred["Contig_name"] == str(contig), "Prob_Chromosome"
+                ].values[0]
+                * mlpred.loc[
+                    mlpred["Contig_name"] == str(contig), "Contig_length"
+                ].values[0]
+            )
+            prob_plas += (
+                mlpred.loc[mlpred["Contig_name"] == str(contig), "Prob_Plasmid"].values[
+                    0
+                ]
+                * mlpred.loc[
+                    mlpred["Contig_name"] == str(contig), "Contig_length"
+                ].values[0]
+            )
             # labeling = mlpred.loc[mlpred[3] == contig, 2].values[0]
-
+            cumulated_l += mlpred.loc[
+                mlpred["Contig_name"] == str(contig), "Contig_length"
+            ].values[0]
         if ncontigs == 0:
+            print(
+                "fragment",
+                frag,
+                " is not matching any contig. Check gfa and prediction.Aborting.",
+            )
             continue
 
-        prob_chromo /= ncontigs
-        prob_plas /= ncontigs
+        prob_chromo /= cumulated_l
+        prob_plas /= cumulated_l
 
         if prob_plas >= prob_chromo:
             label = "Plasmid"
