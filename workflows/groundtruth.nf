@@ -1,6 +1,6 @@
 #!/usr/bin/env nextflow
 
-include {PUBLISH; PUBLISH as REF} from "./utils.nf"
+// include {PUBLISH; PUBLISH as REF} from "./utils.nf"
 
 process NCBI {
     errorStrategy 'ignore'
@@ -76,23 +76,23 @@ workflow BUILD_GT {
     NCBI(id)
 
     reference = NCBI.out.ref
-    REF(reference)
+    // REF(reference)
     
     BLAST ( input_ch.join(reference) )
 
-    PUBLISH(BLAST.out.pangt.map{it, a, b -> [it, a]
-        }.mix(
-            BLAST.out.pangt.map{it, a, b -> [it, b]}
-        ).mix(
-            BLAST.out.unigt.map{it, a, b -> [it, a]}
-        ).mix(
-            BLAST.out.unigt.map{it, a, b -> [it, b]}
-        ).mix(
-            BLAST.out.skegt.map{it, a, b -> [it, a]}
-        ).mix(
-            BLAST.out.skegt.map{it, a, b -> [it, b]}
-        )
-    )
+    // PUBLISH(BLAST.out.pangt.map{it, a, b -> [it, a]
+    //     }.mix(
+    //         BLAST.out.pangt.map{it, a, b -> [it, b]}
+    //     ).mix(
+    //         BLAST.out.unigt.map{it, a, b -> [it, a]}
+    //     ).mix(
+    //         BLAST.out.unigt.map{it, a, b -> [it, b]}
+    //     ).mix(
+    //         BLAST.out.skegt.map{it, a, b -> [it, a]}
+    //     ).mix(
+    //         BLAST.out.skegt.map{it, a, b -> [it, b]}
+    //     )
+    // )
     emit:
     pan_mix = BLAST.out.pangt
     pan_uni = BLAST.out.unigt
