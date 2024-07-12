@@ -105,10 +105,10 @@ workflow {
     GPLASUNI(assembly_ch.map{id, uni, ske -> [id, uni]}.join(MLPLASMIDS.out.uni)) 
     GPLASSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske)) 
 
-    PBFPAN(pasm_ch.join(MLPLASMIDS.out.mixed)) 
-    PBFPANSTAR(pasm_ch.join(MLPLASMIDS.out.mixed)) 
-    PBFUNI(assembly_ch.map{id, uni, ske -> [id, uni]}.join(MLPLASMIDS.out.uni), "u") 
-    PBFSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske), "s")
+    // PBFPAN(pasm_ch.join(MLPLASMIDS.out.mixed)) 
+    // PBFPANSTAR(pasm_ch.join(MLPLASMIDS.out.mixed)) 
+    // PBFUNI(assembly_ch.map{id, uni, ske -> [id, uni]}.join(MLPLASMIDS.out.uni), "u") 
+    // PBFSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske), "s")
 
 
     ////////////////////// uni gplas
@@ -134,30 +134,30 @@ workflow {
 
     ///////////////////// uni pbf
 
-    // pbfpanuni_ch =
-    EVAL5(PBFPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
-    "pbf.pan.uni")
+    // // pbfpanuni_ch =
+    // EVAL5(PBFPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
+    // "pbf.pan.uni")
     
-    // pbfstarpanuni_ch =
-    EVAL6(PBFPANSTAR.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
-    "pbf.panstar.uni")
+    // // pbfstarpanuni_ch =
+    // EVAL6(PBFPANSTAR.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}),
+    // "pbf.panstar.uni")
     
-    // pbfuni_ch =
-    EVAL7(PBFUNI.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, uni]}),
-    "pbf.uni")
+    // // pbfuni_ch =
+    // EVAL7(PBFUNI.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, uni]}),
+    // "pbf.uni")
 
-    ///////////////////// ske pbf
-    // pbfpanske_ch =
-    EVAL8(PBFPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}),
-    "pbf.pan.ske")
+    // ///////////////////// ske pbf
+    // // pbfpanske_ch =
+    // EVAL8(PBFPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}),
+    // "pbf.pan.ske")
 
-    // pbfstarpanske_ch = 
-    EVAL9(PBFPANSTAR.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}),
-    "pbf.panstar.ske")
+    // // pbfstarpanske_ch = 
+    // EVAL9(PBFPANSTAR.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}),
+    // "pbf.panstar.ske")
 
-    // pbfske_ch = 
-    EVAL10(PBFSKE.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, ske]}),
-    "pbf.ske")
+    // // pbfske_ch = 
+    // EVAL10(PBFSKE.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, ske]}),
+    // "pbf.ske")
 
     // WORKFLOW
 
@@ -170,18 +170,19 @@ workflow {
 
     GPLASPAN.out.res.mix(
         GPLASUNI.out.res.mix(
-            GPLASSKE.out.res.mix(
-                PBFPAN.out.res.mix(
-                    PBFPANSTAR.out.res.mix(
-                        PBFUNI.out.res.mix(
-                            PBFSKE.out.res
-                        )
-                    )
-                )
-            )
-        )
-    )
-    | PUBLISH
+            GPLASSKE.out.res)) | PUBLISH
+
+    //         .mix(
+    //             PBFPAN.out.res.mix(
+    //                 PBFPANSTAR.out.res.mix(
+    //                     PBFUNI.out.res.mix(
+    //                         PBFSKE.out.res
+    //                     )
+    //                 )
+    //             )
+    //         )
+    //     )
+    // )
 
 
 }
