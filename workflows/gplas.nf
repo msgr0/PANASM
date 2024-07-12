@@ -25,9 +25,10 @@ process GPLASPAN {
     #!/bin/bash
 
     python $projectDir/bin/easy-pangenome.py --input ${gfa} --output ${slim_graph}
-    python $projectDir/bin/remove_nodes.py --input ${slim_graph} --output ${trimmed} --threshold 1000
 
-    python $projectDir/bin/mlpl.asmtopan.py --pred ${pred} --graph ${gfa}  --output ${gplas_pred}
+    python $projectDir/bin/mlpl.asmtopan.py --pred ${pred} --graph ${gfa}  --output ${gplas_pred} --thr 1000
+
+    python $projectDir/bin/remove_nodes.py --input ${slim_graph} --output ${trimmed} --threshold 1000
 
     gplas -c predict -i ${trimmed} -P ${gplas_pred} -n ${meta.id}.pasm
 
@@ -52,7 +53,7 @@ process GPLASUNI {
     ren_gfa = "${meta.id}.u.ren.gfa"
     ren_fasta = "${meta.id}.u.ren.fasta"
 
-    gplas_pred = "${meta.id}.u.gplas.pred"
+    gplas_pred = "${meta.id}.u.gplas.ml.pred"
 
     bins    = "results/${meta.id}.u_bins.tab"
     results = "results/${meta.id}.u_results.tab"

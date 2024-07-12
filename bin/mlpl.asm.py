@@ -57,6 +57,7 @@ def main(args):
             continue
 
         label = mlpred.loc[mlpred["Contig_name"] == contig, "Prediction"].values[0]
+        label = label.capitalize()
         prob_chromo = mlpred.loc[
             mlpred["Contig_name"] == contig, "Prob_Chromosome"
         ].values[0]

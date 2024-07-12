@@ -10,6 +10,7 @@ def main(args):
     graph = args.graph
     output = args.output
     pbf = args.pbf
+    thr = args.thr
 
     mlpred_head = [
         "Prob_Chromosome",
@@ -71,6 +72,8 @@ def main(args):
 
         name = f"S{frag.name}_LN:i:{frag.LN}_dp:f:{frag.cv}"
 
+        if length < thr:
+            continue
         df.loc[len(df)] = {
             "Prob_Chromosome": prob_chromo,
             "Prob_Plasmid": prob_plas,
@@ -94,5 +97,6 @@ if __name__ == "__main__":
     parser.add_argument("--graph", "-g", help="pangenome_graph convert mlplas into")
     parser.add_argument("--output", "-o", help="output")
     parser.add_argument("--pbf", help="pbf output mode")
+    parser.add_argument("--thr", help="threshold")
     args = parser.parse_args()
     main(args)

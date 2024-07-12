@@ -78,11 +78,15 @@ process AUGMENT {
 
     output:
     tuple val(meta), path(panassembly), emit: panassembly
+    tuple val(meta), path(panassembly), emit: panassembly
+    tuple val(meta), path(panassembly), emit: fasta
 
 
     script:
     panassembly = "${meta.id}.pasm.gfa"
     pangenomecl = "${meta.id}.pan.cl.gfa"
+    // trimmed = ${meta.id}.pasm.trim.gfa
+    // trimmed_fasta = ${meta.id}.pasm.trim.fasta
     // TODO merge the python scripts?? check if reused somewhere
     """
     python $projectDir/bin/gfa_cleaner.py --input ${pangenome} --output ${pangenomecl}
@@ -104,6 +108,7 @@ workflow PANASSEMBLY {
 
     emit:
     panassembly = AUGMENT.out.panassembly
+    panassembly_fasta = AUGMENT.out.fasta
     mixed_fasta = PREPROCESS.out.mixed_fasta
     assembly_graphs = PREPROCESS.out.assembly_graphs
     assembly_fasta = PREPROCESS.out.assembly_fasta
