@@ -136,9 +136,9 @@ def convert_gt(pangenome_graph, gt_csv_file, pangenome_gt_file):
 
 
 def main(args):
-    args.pangenome
-    args.assembly
-    args.reference
+    # args.pangenome
+    # args.assembly
+    # args.reference
     mapping_file = args.output + ".mapping.tsv"
     assembly_gt = args.output + ".gt.tsv"
     pangenome_gt = args.output + ".pan.gt.tsv"

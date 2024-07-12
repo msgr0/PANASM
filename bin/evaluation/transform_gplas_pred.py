@@ -48,7 +48,7 @@ def main(args):
                     pass
             except:
                 print("Halted cause of length error: check your gfa file.")
-                print(contig)
+                print("contig", contig)
                 sys.exit(1)
 
         out_prediction.loc[len(out_prediction)] = [plasmid, out_contig, contig_len]

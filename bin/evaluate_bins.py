@@ -35,15 +35,6 @@ def safe_div(x, y):
     else:
         return x / y
 
-
-def safe_div(x, y):
-    """Safe division to handle division by zero"""
-    if y == 0:
-        return 0
-    else:
-        return x / y
-
-
 def parser():
 
     parser = ap.ArgumentParser()
@@ -62,20 +53,20 @@ def parser():
     return parser.parse_args()
 
 
-def plot_(data: pd.DataFrame, _output: str, _title: str):
-    chart = (
-        alt.Chart(data)
-        .mark_bar()
-        .encode(
-            x="sample",
-            y="length",
-            color="type",
-            order=alt.Order("type", sort="ascending"),
-            tooltip="length",
-        )
-        .properties(title=_title)
-    )
-    chart.save(_output)
+# def plot_(data: pd.DataFrame, _output: str, _title: str):
+#     chart = (
+#         alt.Chart(data)
+#         .mark_bar()
+#         .encode(
+#             x="sample",
+#             y="length",
+#             color="type",
+#             order=alt.Order("type", sort="ascending"),
+#             tooltip="length",
+#         )
+#         .properties(title=_title)
+#     )
+#     chart.save(_output)
 
 
 def main():
