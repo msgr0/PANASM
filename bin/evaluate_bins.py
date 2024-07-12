@@ -35,6 +35,7 @@ def safe_div(x, y):
     else:
         return x / y
 
+
 def parser():
 
     parser = ap.ArgumentParser()
@@ -114,17 +115,15 @@ def main():
     pred_plasmid_len = bin_file.groupby(by="plasmid").sum()["contig_len"]
 
     out += f"[GROUND TRUTH]\n\n"
-    out += f"Total plasmids ground_truth length: {gt_plasmid_length} \n"
     out += f"Sum:------------------------------: {int(gt_plasmid_length.sum())}\n\n"
 
     out += f"[PREDICTION]\n\n"
-    out += f"Total plasmids predicted length: {pred_plasmid_len} \n"
     out += f"Sum:---------------------------: {int(pred_plasmid_len.sum())}\n\n"
 
     ## calculate true positives, false negatives and false positives for SCORES
-    t_pos = []
-    f_neg = []
-    f_pos = []
+    t_pos = set()
+    f_neg = set()
+    f_pos = set()
     t_pos_len = 0
     f_neg_len = 0
     f_pos_len = 0
@@ -135,18 +134,21 @@ def main():
             row[0] != "chromosome"
         ):  ## here we can find TRUE POSITIVE and FALSE NEGATIVES plasmids
             if row[1] in bin_file["contig"].values:
-                t_pos.append(row[1])
-                t_pos_len += row[4]
+                if row[1] not in t_pos:
+                    t_pos.add(row[1])
+                    t_pos_len += row[4]
             else:
-                f_neg.append(row[1])
-                f_neg_len += row[4]
+                if row[1] not in f_neg:
+                    f_neg.add(row[1])
+                    f_neg_len += row[4]
 
         elif (
             row[0] == "chromosome"
         ):  ## here we can find FALSE PLASMIDS (FALSE POSITIVES)
             if row[1] in bin_file["contig"].values:
-                f_pos.append(row[1])
-                f_pos_len += row[4]
+                if row[1] not in f_pos:
+                    f_pos.add(row[1])
+                    f_pos_len += row[4]
 
     out += f"True positives: {t_pos}\n"
     out += f"True positives LEN: {t_pos_len}\n"
