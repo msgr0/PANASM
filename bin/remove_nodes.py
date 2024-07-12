@@ -3,8 +3,11 @@ import sys
 import argparse as ap
 from itertools import combinations
 
-## remove nodes from gfa below the defined treshold
-## list all neighbours of a node that is to be removed and conne them in pairs
+
+"""
+this python script removes nodes from a Gfa files based on a provided length threshold
+and then reconnects neighbours of the removed node by pairs
+"""
 
 
 def main(args):

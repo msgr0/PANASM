@@ -13,7 +13,8 @@ process GPLASPAN {
 
     script:
     slim_graph = "${meta.id}.slim.gfa"
-    gplas_pred = "${meta.id}.pasm.gplas.pred"
+    trimmed = "${meta.id}.slimmed.gfa"
+    gplas_pred = "${meta.id}.pasm.gplas.ml.pred"
 
     bins    = "results/${meta.id}.pasm_bins.tab"
     results = "results/${meta.id}.pasm_results.tab"
@@ -24,10 +25,11 @@ process GPLASPAN {
     #!/bin/bash
 
     python $projectDir/bin/easy-pangenome.py --input ${gfa} --output ${slim_graph}
+    python $projectDir/bin/remove_nodes.py --input ${slim_graph} --output ${trimmed} --threshold 1000
 
     python $projectDir/bin/mlpl.asmtopan.py --pred ${pred} --graph ${gfa}  --output ${gplas_pred}
 
-    gplas -c predict -i ${slim_graph} -P ${gplas_pred} -n ${meta.id}.pasm
+    gplas -c predict -i ${trimmed} -P ${gplas_pred} -n ${meta.id}.pasm
 
     python $projectDir/bin/evaluation/transform_gplas_pred.py --input ${bins} --gfa ${gfa} --output ${res} 
 
