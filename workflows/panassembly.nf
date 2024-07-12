@@ -78,8 +78,6 @@ process AUGMENT {
 
     output:
     tuple val(meta), path(panassembly), emit: panassembly
-    tuple val(meta), path(panassembly), emit: panassembly
-    tuple val(meta), path(panassembly), emit: fasta
 
 
     script:
