@@ -106,7 +106,6 @@ workflow PANASSEMBLY {
 
     emit:
     panassembly = AUGMENT.out.panassembly
-    panassembly_fasta = AUGMENT.out.fasta
     mixed_fasta = PREPROCESS.out.mixed_fasta
     assembly_graphs = PREPROCESS.out.assembly_graphs
     assembly_fasta = PREPROCESS.out.assembly_fasta
