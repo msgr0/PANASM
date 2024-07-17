@@ -28,7 +28,7 @@ process GPLASPAN {
 
     python $projectDir/bin/mlpl.asmtopan.py --pred ${pred} --graph ${gfa}  --output ${gplas_pred} --thr 1000
 
-    python $projectDir/bin/remove_nodes.py --input ${slim_graph} --output ${trimmed} --threshold 1000
+    python $projectDir/bin/remove_nodes.py --input ${slim_graph} --output ${trimmed} --threshold 2500
 
     gplas -c predict -i ${trimmed} -P ${gplas_pred} -n ${meta.id}.pasm
 

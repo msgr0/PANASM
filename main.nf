@@ -102,8 +102,8 @@ workflow {
 
 
     GPLASPAN(pasm_ch.join(MLPLASMIDS.out.mixed)) // meta, pangenome, prediction
-    GPLASUNI(assembly_ch.map{id, uni, ske -> [id, uni]}.join(MLPLASMIDS.out.uni)) 
-    GPLASSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske)) 
+    // GPLASUNI(assembly_ch.map{id, uni, ske -> [id, uni]}.join(MLPLASMIDS.out.uni)) 
+    // GPLASSKE(assembly_ch.map{id, uni, ske -> [id, ske]}.join(MLPLASMIDS.out.ske)) 
 
     // PBFPAN(pasm_ch.join(MLPLASMIDS.out.mixed)) 
     // PBFPANSTAR(pasm_ch.join(MLPLASMIDS.out.mixed)) 
@@ -118,8 +118,8 @@ workflow {
     "gplas.pan.uni")
     
     // gpuni_ch =
-    EVAL2(GPLASUNI.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, uni]}),
-    "gplas.uni")
+    // EVAL2(GPLASUNI.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, uni]}),
+    // "gplas.uni")
 
     ///////////////////// ske gplas
     
@@ -128,8 +128,8 @@ workflow {
     "gplas.pan.ske")
     
     // gpske_ch =
-    EVAL4(GPLASSKE.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, ske]}),
-    "gplas.ske")
+    // EVAL4(GPLASSKE.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, ske]}),
+    // "gplas.ske")
 
 
     ///////////////////// uni pbf
@@ -168,9 +168,10 @@ workflow {
     // run mlplasmids
 
 
-    GPLASPAN.out.res.mix(
-        GPLASUNI.out.res.mix(
-            GPLASSKE.out.res)) | PUBLISH
+    GPLASPAN.out.res | PUBLISH //.mix(
+        // GPLASUNI.out.res.mix(
+        //     GPLASSKE.out.res)
+    // ) | PUBLISH
 
     //         .mix(
     //             PBFPAN.out.res.mix(
