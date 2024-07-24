@@ -17,6 +17,46 @@ def main(args):
     graph.to_file(args.output)
 
 
+def edge_tos(edge):
+    # edge[0] L_NODE
+    # edge[0][0] name
+    # edge[0][1] orient
+    # edge[0][2] original pos (l=left, r=right)
+    #
+    # edge[1] R_NODE
+    # edge[1][0] name
+    # edge[1][1] orient
+    # edge[1][2] original pos (l=left, r=right)
+    #
+    # if L_NODE(edge[0][2] == 'r') then reverse orient
+    # if R_NODE(edge[1][2] == 'l') then reverse orient
+    #
+    # after that, if edge[0][1] == '-' == edge[1][1] then reverse polarity and invert position
+    # i.e.    A -  B -   becomes   B +  A +    for clarity and consistency ...
+    #
+    l_orient = "?"
+    r_orient = "?"
+
+    if edge[0][2] == 'r':
+        l_orient = invert(edge[0][1])
+    elif edge [0][2] == 'l':
+        l_orient = edge[0][1]
+
+    if edge[1][2] == 'l':
+        r_orient = invert(edge[1][1])
+    elif edge[1][2] == 'r':
+        r_orient = edge[1][1]
+
+    return gp.Line(f"L\t{edge[0][0]}\t{l_orient}\t{edge[1][0]}\t{r_orient}\t0M")
+
+
+def invert(sign):
+    if sign == '+':
+        return '-'
+    elif sign == '-':
+        return '+'
+
+
 def remove(gfa, threshold):
     total_len = len(gfa.segments)
     counter = 0
@@ -35,24 +75,30 @@ def remove(gfa, threshold):
 
             for e in seg.dovetails:
                 if e.from_segment.name != seg.name:
-                    nodes_to_reconnect.add(f"{e.from_segment.name}\t{e.from_orient}")
+                    nodes_to_reconnect.add((f"{e.from_segment.name}", f"{e.from_orient}", 'l'))
                 elif e.to_segment.name != seg.name:
-                    nodes_to_reconnect.add(f"{e.to_segment.name}\t{e.to_orient}")
+                    nodes_to_reconnect.add((f"{e.to_segment.name}", f"{e.to_orient}", 'r'))
                 else:
                     continue  ## self edge
                 gfa.rm(e)
 
+
+            # TODO: combinations divide for plus and minus strand
             pairs = list(combinations(nodes_to_reconnect, 2))
             for edge in pairs:
-                new_edge = gp.Line(f"L\t{edge[0]}\t{edge[1]}\t0M")
+                new_edge = edge_tos(edge)
+                print (new_edge)
                 try:
                     gfa.add_line(new_edge)
+
                 except:
                     pass
                     # print(f"edge already added!")
                 # print(new_edge)
             seg.disconnect()
             gfa.validate()
+
+            # TODO: end
 
 
 if __name__ == "__main__":
