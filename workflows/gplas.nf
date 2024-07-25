@@ -26,8 +26,7 @@ process GPLASPAN {
 
     python $projectDir/bin/easy-pangenome.py --input ${gfa} --output ${slim_graph}
 
-    python $projectDir/bin/mlpl.asmtopan.py --pred ${pred} --graph ${gfa}  --output ${gplas_pred} --thr 1000
-
+    python $projectDir/bin/mlpl.asmtopan.py --pred ${pred} --graph ${gfa} --output ${gplas_pred} --thr 1000
 
     gplas -c predict -i ${slim_graph} -P ${gplas_pred} -n ${meta.id}.pasm
 

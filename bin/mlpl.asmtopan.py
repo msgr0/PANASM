@@ -88,6 +88,7 @@ def main(args):
     if pbf != None:
         df_pbf.to_csv(pbf, sep="\t", index=False, header=False)
     df.to_csv(output, sep="\t", index=False)
+    print("done transforming ML PLASMID PRED")
 
 
 if __name__ == "__main__":
