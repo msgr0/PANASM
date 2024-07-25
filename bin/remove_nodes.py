@@ -102,6 +102,7 @@ def remove(gfa, threshold):
     total_len = len(gfa.segments)
     counter = 0
     for seg in gfa.segments:
+        # print(seg)
 
         counter += 1
         if counter % 10 == 0:
@@ -117,8 +118,12 @@ def remove(gfa, threshold):
 
         if (seg.LN != None and seg.LN <= threshold) or (len(seg.sequence) <= threshold):
             nodes_to_reconnect = set()
-
-            for e in seg.edges:
+            print("segment: ", seg.name)
+            for e in seg.dovetails:
+                # print(e)
+                # print(e.from_segment.name)
+                if type(e.from_segment) == str:
+                    continue
                 if e.from_segment.name != seg.name:
                     nodes_to_reconnect.add(
                         (f"{e.from_segment.name}", f"{e.from_orient}", "l")
@@ -127,10 +132,24 @@ def remove(gfa, threshold):
                     nodes_to_reconnect.add(
                         (f"{e.to_segment.name}", f"{e.to_orient}", "r")
                     )
+                # else:
+                #     try:
+                #         gfa.rm(e)
+                #     except:
+                #         pass
+                #     # print("Dup", e.from_segment.name, "--", e.to_segment.name)
+                #     continue
                 gfa.rm(e)  ## else do nothing and remove self edge.
-
+                # print("---removed:", e)
+            seg.disconnect()
             pairs = list(combinations(nodes_to_reconnect, 2))
+            gfa.validate()
+            if len(nodes_to_reconnect) == 1:
+                print("cappio")
+                continue
             for edge in pairs:
+                if edge[0][0] == edge[1][0]:
+                    continue
                 new_edge = edge_tos(edge)
                 # print (new_edge)
                 try:
@@ -139,8 +158,6 @@ def remove(gfa, threshold):
                     pass
                     # print(f"edge already added!")
                 # print(new_edge)
-            gfa.validate()
-            seg.disconnect()
             gfa.validate()
 
 
