@@ -9,8 +9,9 @@ def main(args):
     pred = args.pred
     graph = args.graph
     output = args.output
-    pbf = args.pbf
+    pbf = None  ## TODO change me, testing for gplas ...
     thr = args.thr
+    print("starting converting MLPLSAMIDS prediction ...")
 
     mlpred_head = [
         "Prob_Chromosome",

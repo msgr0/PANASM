@@ -128,8 +128,8 @@ def remove(gfa, threshold):
                         (f"{e.to_segment.name}", f"{e.to_orient}", "r")
                     )
                 else:
-                    continue  ## self edge
-                gfa.rm(e)
+                    pass
+                gfa.rm(e)  ## else do nothing and remove self edge.
 
             pairs = list(combinations(nodes_to_reconnect, 2))
             for edge in pairs:
