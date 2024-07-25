@@ -21,7 +21,7 @@ def convert_species(spec) {
 }
 
 process MLPLASMIDS {
-    errorStrategy 'ignore'
+    // errorStrategy 'ignore'
 
 
     input:
