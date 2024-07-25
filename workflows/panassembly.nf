@@ -41,7 +41,7 @@ process PREPROCESS {
     fi
 
     python $projectDir/bin/rename_gfa.py -i ${uni_trim} -o ${uni_gfa_o} -p 'uni'
-    python $projectDir/bin/rename_gfa.py -i ${ske_trim} -o ${ske_gfa_o} -p 'ske'
+    python $projectDir/bin/rename_gfa.py -i ${ske_trim} -o ${ske_gfa_o} -p 'ske' --convert
 
     awk '/^S/{print ">"\$2; print ""\$3}' ${uni_gfa_o} > ${uni_fasta}
     awk '/^S/{print ">"\$2; print ""\$3}' ${ske_gfa_o} > ${ske_fasta}

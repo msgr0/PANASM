@@ -24,12 +24,12 @@ process GPLASPAN {
     """
     #!/bin/bash
 
-    python $projectDir/bin/easy-pangenome.py --input ${gfa} --output ${trimmed}
+    python $projectDir/bin/easy-pangenome.py --input ${gfa} --output ${slim_graph}
 
     python $projectDir/bin/mlpl.asmtopan.py --pred ${pred} --graph ${gfa}  --output ${gplas_pred} --thr 1000
 
 
-    gplas -c predict -i ${trimmed} -P ${gplas_pred} -n ${meta.id}.pasm
+    gplas -c predict -i ${slim_graph} -P ${gplas_pred} -n ${meta.id}.pasm
 
     python $projectDir/bin/evaluation/transform_gplas_pred.py --input ${bins} --gfa ${gfa} --output ${res} 
 
