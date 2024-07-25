@@ -2,7 +2,7 @@
 
 process GPLASPAN {
 
-    errorStrategy 'ignore'
+    // errorStrategy 'ignore'
     maxForks 1
     input:
     tuple val(meta), path(gfa), path(pred)
@@ -24,22 +24,22 @@ process GPLASPAN {
     """
     #!/bin/bash
 
-    python $projectDir/bin/easy-pangenome.py --input ${gfa} --output ${slim_graph}
+    python $projectDir/bin/easy-pangenome.py --input ${gfa} --output ${trimmed}
 
     python $projectDir/bin/mlpl.asmtopan.py --pred ${pred} --graph ${gfa}  --output ${gplas_pred} --thr 1000
 
-    python $projectDir/bin/remove_nodes.py --input ${slim_graph} --output ${trimmed} --threshold 2500
 
     gplas -c predict -i ${trimmed} -P ${gplas_pred} -n ${meta.id}.pasm
 
     python $projectDir/bin/evaluation/transform_gplas_pred.py --input ${bins} --gfa ${gfa} --output ${res} 
 
     """
+    // python $projectDir/bin/remove_nodes.py --input ${slim_graph} --output ${trimmed} --threshold 2500
 
 }
 
 process GPLASUNI {
-    errorStrategy 'ignore'
+    // errorStrategy 'ignore'
     maxForks 1
 
 
@@ -81,7 +81,7 @@ process GPLASUNI {
 
 process GPLASSKE {
 
-    errorStrategy 'ignore'
+    // errorStrategy 'ignore'
     maxForks 1
 
     input:

@@ -32,7 +32,7 @@ process PREPROCESS {
     bgzip -d -c ${uni_gfa} > ${uni_orig}
     bgzip -d -c ${skesa_gfa} > ${ske_orig}
 
-    if [ "${meta.thr}" == 0]; then
+    if [ ${meta.thr} == 0]; then
         cp ${uni_orig} ${uni_trim}
         cp ${ske_orig} ${ske_trim}
     else
