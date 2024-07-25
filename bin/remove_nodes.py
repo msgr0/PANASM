@@ -118,7 +118,7 @@ def remove(gfa, threshold):
         if (seg.LN != None and seg.LN <= threshold) or (len(seg.sequence) <= threshold):
             nodes_to_reconnect = set()
 
-            for e in seg.dovetails:
+            for e in seg.edges:
                 if e.from_segment.name != seg.name:
                     nodes_to_reconnect.add(
                         (f"{e.from_segment.name}", f"{e.from_orient}", "l")
@@ -127,8 +127,6 @@ def remove(gfa, threshold):
                     nodes_to_reconnect.add(
                         (f"{e.to_segment.name}", f"{e.to_orient}", "r")
                     )
-                else:
-                    pass
                 gfa.rm(e)  ## else do nothing and remove self edge.
 
             pairs = list(combinations(nodes_to_reconnect, 2))
