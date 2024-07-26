@@ -99,6 +99,6 @@ if __name__ == "__main__":
     parser.add_argument("--graph", "-g", help="pangenome_graph convert mlplas into")
     parser.add_argument("--output", "-o", help="output")
     parser.add_argument("--pbf", help="pbf output mode")
-    parser.add_argument("--thr", help="threshold")
+    parser.add_argument("--thr", help="threshold", type=int)
     args = parser.parse_args()
     main(args)
