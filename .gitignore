@@ -3,4 +3,4 @@
 /plots
 /.vscode
 /.DS_Store
-.gfa
+*.gfa
