@@ -3,6 +3,7 @@
 // include {PUBLISH; PUBLISH as REF} from "./utils.nf"
 
 process NCBI {
+    publishDir "${params.input}/", mode: 'copy', overwrite: true
     errorStrategy 'ignore'
 
     input:
@@ -62,20 +63,26 @@ process BLAST {
 
 }
 
+workflow DOWNLOAD_GT {
+    take:
+    id
+
+    main:
+    NCBI(id)
+
+    emit:
+    reference =  NCBI.out.ref
+
+}
 
 workflow BUILD_GT {
     take:
 
     input_ch // pangenome, mixed_fasta, assembly_fasta
+    reference
 
 
     main:
-    id = input_ch.map{id, pan, mixed, asm1, asm2 -> id}
-
-    NCBI(id)
-
-    reference = NCBI.out.ref
-    // REF(reference)
     
     BLAST ( input_ch.join(reference) )
 
