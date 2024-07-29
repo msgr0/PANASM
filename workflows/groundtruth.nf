@@ -7,17 +7,16 @@ process NCBI {
     errorStrategy 'ignore'
 
     input:
-    val (meta)
+    val (id)
 
     output:
-    tuple val(meta), path(reference_ren), emit: ref
+    tuple val(id), path(reference_ren), emit: ref
 
     script:
-    referencegz = "${meta.id}.fna.gz"
-    reference = "${meta.id}.fna"
-    reference_ren = "${meta.id}.ren.fna"
+    referencegz = "${id}.fna.gz"
+    reference = "${id}.fna"
+    reference_ren = "${id}.ren.fna"
 
-    id = "${meta.id}".split("-")[0]
     """
     python $projectDir/bin/evaluation/ncbi_link.py --input ${id} --output ${referencegz}
     bgzip -d -c ${referencegz} > ${reference}
