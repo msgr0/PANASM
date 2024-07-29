@@ -48,7 +48,7 @@ workflow {
         [fmeta, files]
     }
 
-    referenche_ch = Channel.fromPath("${params.input}/*.ref.fna", type: 'file')
+    reference_ch = Channel.fromPath("${params.input}/*.ref.fna", type: 'file')
 
     if (params.tool.gt || reference_ch.ifEmpty(true) ) {
         DOWNLOAD_GT(input_ch.map{meta, files -> meta.id})
