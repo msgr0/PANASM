@@ -2,6 +2,7 @@ import gfapy as gp
 import sys
 import argparse as ap
 from itertools import combinations
+from itertools import product
 
 
 true = True
@@ -15,16 +16,9 @@ and then reconnects neighbours of the removed node by pairs
 """
 
 
-def main(args):
-    gfa_file_path = args.input
-    graph = gp.Gfa.from_file(gfa_file_path)
-    remove(graph, args.threshold)
-    graph.to_file(args.output)
-
-
 def edge_exists(edge, collection):
     for e in collection:
-        if edge_compare(edge, e) or edge_compare(edge_mirror(edge), e):
+        if edge_compare(edge, e) or edge_compare(edge_reverse(edge), e):
             return true
     return false
 
@@ -36,7 +30,7 @@ def edge_compare(edge1, edge2):
     return false
 
 
-def edge_mirror(edge):
+def edge_reverse(edge):
     """
     from an edge( L(node1, orient1, position1), R(node2, orient2, position2))
     output the mirrored edge (R, L) with reversed orientation
@@ -50,7 +44,12 @@ def edge_mirror(edge):
     )
 
 
-def edge_tos(edge):
+def stoe(string):
+    estr = str(string).split("\t")
+    return ((estr[1], estr[2], "l"), (estr[3], estr[4], "r"))
+
+
+def etos(edge):
     """
     from an edge( L(node1, orient1, position1), R(node2, orient2, position2))
     output the corresponding gfa formatted Link (L) string.
@@ -98,27 +97,108 @@ def invert(sign):
         return "l"
 
 
+def progress(counter, tot):
+    if counter % 10 == 0:
+        print(
+            "working...",
+            int(counter / tot * 10),
+            "% graph analized",
+            end="\r",
+            file=sys.stderr,
+        )
+    return counter + 1
+
+
+def extract_node(edge, orient, name):
+    node = stoe(edge)
+
+    if orient == "r":
+        if node[0][0] == name and node[1][0] == name:
+            return None
+        elif node[1][1] == "-" and node[1][0] == name:
+            # assert right[1][0] == seg.name
+            # print("reversing R", node)
+            node = edge_reverse(node)
+            # print("into, ", node)
+        elif node[0][1] == "+" and node[0][0] == name:
+            assert node[0][0] == name
+        else:
+            assert False
+        return (node[1][0], node[1][1], orient)
+
+    elif orient == "l":
+        if node[0][0] == name and node[1][0] == name:
+            return None
+        elif node[1][1] == "+" and node[1][0] == name:
+            # assert right[1][0] == seg.name
+            pass
+        elif node[0][1] == "-" and node[0][0] == name:
+            # print("reversing L", node)
+            node = edge_reverse(node)
+            # print("into, ", node)
+        else:
+            assert False
+        return (node[0][0], node[0][1], orient)
+
+
+def remove_lr(gfa, threshold):
+    counter = 1
+    for seg in gfa.segments:
+        counter = progress(counter, len(gfa.segments))
+        if (seg.LN != None and seg.LN <= threshold) or (len(seg.sequence) <= threshold):
+            pass
+        else:
+            continue
+
+        right_edges = list(seg.dovetails_R)
+        left_edges = list(seg.dovetails_L)
+
+        right_nodes = set()  # edge(node, orient, 'r')
+        left_nodes = set()
+        # print("removing seg", seg.name)
+        # print("r-edge", right_edges)
+        # print("l-edge", left_edges)
+
+        for e in right_edges:
+            n = extract_node(e, "r", seg.name)
+            if n is not None:
+                right_nodes.add(n)
+                gfa.rm(e)
+        for e in left_edges:
+            n = extract_node(e, "l", seg.name)
+            if n is not None:
+                left_nodes.add(n)
+                gfa.rm(e)
+
+        # print("r-node", right_nodes)
+        # print("l_node", left_nodes)
+
+        gfa.rm(seg)
+        # seg.disconnect()
+        pairs = list(product(left_nodes, right_nodes))
+        # print(pairs)
+        gfa.validate()
+        for edge in pairs:
+            new_edge = etos(edge)
+            # print (new_edge)
+            try:
+                gfa.add_line(new_edge)
+            except:
+                pass
+                # print(f"edge already added!")
+            # print(new_edge)
+        gfa.validate()
+
+
 def remove(gfa, threshold):
-    total_len = len(gfa.segments)
+
     counter = 0
     for seg in gfa.segments:
-        # print(seg)
-
-        counter += 1
-        if counter % 10 == 0:
-            print(
-                "working...",
-                int(counter / total_len * 100),
-                "% graph analized",
-                end="\r",
-            )
-        # print(seg.name)
-        #
-        edge_collection = set()
+        counter = progress(counter, len(gfa.segments))
 
         if (seg.LN != None and seg.LN <= threshold) or (len(seg.sequence) <= threshold):
             nodes_to_reconnect = set()
-            print("segment: ", seg.name)
+            # print("segment: ", seg.name)
             for e in seg.dovetails:
                 # print(e)
                 # print(e.from_segment.name)
@@ -145,12 +225,12 @@ def remove(gfa, threshold):
             pairs = list(combinations(nodes_to_reconnect, 2))
             gfa.validate()
             if len(nodes_to_reconnect) == 1:
-                print("cappio")
+                # print("cappio")
                 continue
             for edge in pairs:
                 if edge[0][0] == edge[1][0]:
                     continue
-                new_edge = edge_tos(edge)
+                new_edge = etos(edge)
                 # print (new_edge)
                 try:
                     gfa.add_line(new_edge)
@@ -159,6 +239,22 @@ def remove(gfa, threshold):
                     # print(f"edge already added!")
                 # print(new_edge)
             gfa.validate()
+
+
+def main(args):
+    gfa_file_path = args.input
+    graph = gp.Gfa.from_file(gfa_file_path)
+
+    if args.ver == "2":
+        remove_lr(graph, args.threshold)
+    elif args.ver == "1":
+        remove(graph, args.threshold)
+    else:
+        print(
+            "nothing done ... choose a version with --ver/-v flag = 1 for normal remove, = 2 for left-right removal"
+        )
+        sys.exit(1)
+    graph.to_file(args.output)
 
 
 if __name__ == "__main__":
@@ -171,6 +267,7 @@ if __name__ == "__main__":
         "-t", "--threshold", help="threshold to remove contigs", type=int
     )
     parser.add_argument("-c", "--contains", help="string to remove contigs")
+    parser.add_argument("-v", "--ver", help="version of the tool, either 1 or 2")
 
     args = parser.parse_args()
 

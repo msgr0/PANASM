@@ -36,8 +36,8 @@ process PREPROCESS {
         cp ${uni_orig} ${uni_trim}
         cp ${ske_orig} ${ske_trim}
     else
-        python $projectDir/bin/remove_nodes.py -i ${uni_orig} -o ${uni_trim} -t ${meta.thr} 
-        python $projectDir/bin/remove_nodes.py -i ${ske_orig} -o ${ske_trim} -t ${meta.thr}
+        python $projectDir/bin/remove_nodes.py -i ${uni_orig} -o ${uni_trim} -t ${meta.thr} -v 2
+        python $projectDir/bin/remove_nodes.py -i ${ske_orig} -o ${ske_trim} -t ${meta.thr} -v 2
         # python $projectDir/bin/cedric/filter_GFA.py ${uni_orig} ${meta.thr} ${uni_trim}
         # python $projectDir/bin/cedric/filter_GFA.py ${ske_orig} ${meta.thr} ${ske_trim}
     fi
@@ -104,40 +104,12 @@ workflow PANASSEMBLY {
     MAKEPANGENOME(PREPROCESS.out.mixed_fasta.map{id, fa, fagz -> [id, fagz]})
     AUGMENT(MAKEPANGENOME.out.pangenome.join(PREPROCESS.out.assembly_graphs))
 
-    PUBLISH(AUGMENT.out.panassembly)
+    PUBLISH(AUGMENT.out.panassembly, params.input)
 
     emit:
     panassembly = AUGMENT.out.panassembly
     mixed_fasta = PREPROCESS.out.mixed_fasta
     assembly_graphs = PREPROCESS.out.assembly_graphs
     assembly_fasta = PREPROCESS.out.assembly_fasta
-    
-    
+        
 }
-
-
-// workflow {
-
-//     input_ch = Channel.fromFilePairs(
-//         "${params.input}/*-S*-{s,u}.gfa.gz", type: 'file'
-//     )
-//     input_ch = input_ch.map{meta, files -> 
-//         def fmeta = [:]
-//         fmeta.id = meta[5..-1]
-//         fmeta.species = meta[0..3]
-
-//         [fmeta, files]
-//     }
-
-
-//     thresholds = Channel.of('0', '500')
-//     input_ch = input_ch.combine(thresholds).map {
-//         meta, files, thr ->
-//         [meta + [thr:thr, name:"${meta.species}-${meta.id}-${thr}"], files]
-//     }
-//     input_ch | view
-
-//     PANASSEMBLY(input_ch)
-//     PUBLISH(PANASSEMBLY.out.panassembly)
-
-// }

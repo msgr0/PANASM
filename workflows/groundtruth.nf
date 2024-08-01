@@ -3,26 +3,29 @@
 // include {PUBLISH; PUBLISH as REF} from "./utils.nf"
 
 process NCBI {
-    publishDir "${params.input}/", mode: 'copy', overwrite: true
-    errorStrategy 'ignore'
+    publishDir "${params.input}/", mode: 'copy'
+    // errorStrategy 'ignore'
 
     input:
-    val (id)
+    val (meta)
 
     output:
-    tuple val(id), path(reference_ren), emit: ref
+    tuple val(meta), path(reference_ren), emit: ref
 
     script:
-    referencegz = "${id}.fna.gz"
-    reference = "${id}.fna"
-    reference_ren = "${id}.ren.fna"
+    name = "${meta.species}-${meta.id}"
+    referencegz = "${name}.fna.gz"
+    reference = "${name}.fna"
+    reference_ren = "${name}.ren.fna"
 
     """
-    python $projectDir/bin/evaluation/ncbi_link.py --input ${id} --output ${referencegz}
+    python $projectDir/bin/evaluation/ncbi_link.py --input ${meta.id} --output ${referencegz}
     bgzip -d -c ${referencegz} > ${reference}
 
     python $projectDir/bin/evaluation/strip_plasmid_fasta.py --input ${reference} --output ${reference_ren}
     """
+    
+
 }
 
 process BLAST {
@@ -64,13 +67,15 @@ process BLAST {
 
 workflow DOWNLOAD_GT {
     take:
-    id
+    meta_ch
 
     main:
-    NCBI(id)
+    NCBI(meta_ch)
 
     emit:
-    reference =  NCBI.out.ref
+    reference = NCBI.out.ref
+
+
 
 }
 
