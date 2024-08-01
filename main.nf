@@ -52,6 +52,7 @@ workflow {
         DOWNLOAD_GT(meta_ch)
         reference_ch = DOWNLOAD_GT.out.reference
     }
+    reference_ch | view
 
     input_ch = input_ch.combine(thresholds) | map{ meta, files, thr -> [meta +=[thr:thr], files]} | view
     unicycler_ch = input_ch | map { meta, files -> uni = files.findAll { it.toString().contains("-u.gfa.gz")}; [meta, uni[0]]}
@@ -63,6 +64,7 @@ workflow {
     /*
     Main pipeline based on choices
     */
+    reference_ch | view
 
     if (params.pangenome) {
         input_ch | PANASSEMBLY

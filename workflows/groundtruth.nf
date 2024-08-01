@@ -31,7 +31,8 @@ process NCBI {
 process BLAST {
 
     input:
-    tuple val(meta), path(graph), path(mix), path(uni), path(ske), path(reference)
+    tuple val(meta), path(graph), path(mix), path(uni), path(ske)
+    tuple val(meta2), path(reference)
 
     output:
     tuple val(meta), path(pan_mix_gt), path(mix_gt), emit: pangt
@@ -83,26 +84,12 @@ workflow BUILD_GT {
     take:
 
     input_ch // pangenome, mixed_fasta, assembly_fasta
-    reference
+    reference // [meta, reference]
 
 
     main:
     
-    BLAST ( input_ch.join(reference) )
-
-    // PUBLISH(BLAST.out.pangt.map{it, a, b -> [it, a]
-    //     }.mix(
-    //         BLAST.out.pangt.map{it, a, b -> [it, b]}
-    //     ).mix(
-    //         BLAST.out.unigt.map{it, a, b -> [it, a]}
-    //     ).mix(
-    //         BLAST.out.unigt.map{it, a, b -> [it, b]}
-    //     ).mix(
-    //         BLAST.out.skegt.map{it, a, b -> [it, a]}
-    //     ).mix(
-    //         BLAST.out.skegt.map{it, a, b -> [it, b]}
-    //     )
-    // )
+    BLAST ( input_ch, reference )
     emit:
     pan_mix = BLAST.out.pangt
     pan_uni = BLAST.out.unigt

@@ -183,6 +183,8 @@ def remove_lr(gfa, threshold):
             # print (new_edge)
             try:
                 gfa.add_line(new_edge)
+                if edge[0][0] in ["13", "1"] and edge[1][0] in ["13", "1"]:
+                    print("segment_removed:", seg.name, " providing edge:", new_edge)
             except:
                 pass
                 # print(f"edge already added!")
@@ -234,6 +236,11 @@ def remove(gfa, threshold):
                 # print (new_edge)
                 try:
                     gfa.add_line(new_edge)
+                    if edge[0][0] in ["13", "1"] and edge[1][0] in ["13", "1"]:
+                        print(
+                            "segment_removed:", seg.name, " providing edge:", new_edge
+                        )
+
                 except:
                     pass
                     # print(f"edge already added!")
