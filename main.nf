@@ -17,23 +17,8 @@ include { GPLASPAN; GPLASUNI; GPLASSKE  } from "./workflows/gplas.nf"
 //     c. PBF pangenome (only on pangenome graphs)
 include { PBFPANSTAR; PBFPAN; PBF as PBFUNI; PBF as PBFSKE } from "./workflows/pbf.nf"
 
-// include { EVALUATE as EVAL1 } from "./workflows/evaluation.nf"
-// include { EVALUATE as EVAL2 } from "./workflows/evaluation.nf"
-// include { EVALUATE as EVAL3 } from "./workflows/evaluation.nf"
-// include { EVALUATE as EVAL4 } from "./workflows/evaluation.nf"
-// include { EVALUATE as EVAL5 } from "./workflows/evaluation.nf"
-// include { EVALUATE as EVAL6 } from "./workflows/evaluation.nf"
-// include { EVALUATE as EVAL7 } from "./workflows/evaluation.nf"
-// include { EVALUATE as EVAL8 } from "./workflows/evaluation.nf"
-// include { EVALUATE as EVAL9 } from "./workflows/evaluation.nf"
-// include { EVALUATE as EVAL10 } from "./workflows/evaluation.nf"
+include { EVALUATE as EVAL } from "./workflows/evaluation.nf"
 
-// include {PUBLISH } from "./workflows/utils.nf"
-
-// 5. EVALUATE (GT, predition) for Unic, Skesa, Pangenome(U) and Pangenome(S)
-// include { EVALUATE } from "./workflows.evaluate.nf"
-// 6. PLOT (Unicyler, Pangenome(U)) PLOT (Skesa, Pangenome)
-// do this last step by hand-ipynb-rnb-julianb: compute global statistics! compairison plots!
 
 workflow {
 
@@ -93,7 +78,7 @@ workflow {
     pbfs_pans_ch = [PBFPANSTAR.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}), "pbfstar.pan.ske"]
 
     evaluate_ch = gplas_panu_ch.mix(gplas_pans_ch).mix(pbf_panu_ch).mix(pbf_pans_ch).mix(pbfs_panu_ch).mix(pbfs_pans_ch)
-    EVAL1(evaluate_ch)
+    EVAL(evaluate_ch)
         
 
 
