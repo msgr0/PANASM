@@ -10,7 +10,7 @@ def main(args):
     graph = args.graph
     output = args.output
     pbf = None  ## TODO change me, testing for gplas ...
-    thr = args.thr
+    thr = args.thr if args.thr != None else 0
     print("starting converting MLPLSAMIDS prediction ...")
 
     mlpred_head = [

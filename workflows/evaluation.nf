@@ -9,8 +9,7 @@ workflow EVALUATE {
     main:
     EVAL(input)
     inpath = Channel.fromPath('${params.input}', type: 'dir')
-    PUBLISH(EVAL.out.stats, inpath)
-
+    
     emit:
     stats = EVAL.out.stats
 
