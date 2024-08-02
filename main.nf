@@ -64,20 +64,20 @@ workflow {
     MLPLASMIDS(mixed_fasta_ch.map{id, fa, fagz -> [id, fa]}.join(assembly_fa_ch)) // each sample at a certain threshold will have his prediction done here
         // MLPLASMIDS.out.mixed | PUBLISH
 
-    GPLASPAN(pasm_ch.join(MLPLASMIDS.out.mixed))
-    PBFPAN(pasm_ch.join(MLPLASMIDS.out.mixed)) 
-    PBFPANSTAR(pasm_ch.join(MLPLASMIDS.out.mixed)) 
+    GPLASPAN(panassembly_ch.join(MLPLASMIDS.out.mixed))
+    PBFPAN(panassembly_ch.join(MLPLASMIDS.out.mixed)) 
+    PBFPANSTAR(panassembly_ch.join(MLPLASMIDS.out.mixed)) 
 
-    gplas_panu_ch = [GPLASPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}), "gplas.pan.uni"]
-    gplas_pans_ch = [GPLASPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}), "gplas.pan.ske"]
-    
-    pbf_panu_ch = [PBFPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}), "pbf.pan.uni"]
-    pbf_pans_ch = [PBFPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}), "pbf.pan.ske"]
+    gplas_panu_ch = GPLASPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan, "gplas.pan.uni"]})
+    gplas_pans_ch = GPLASPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan, "gplas.pan.ske"]})
+  
+    pbf_panu_ch = PBFPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan, "pbf.pan.uni"]})
+    pbf_pans_ch = PBFPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan, "pbf.pan.ske"]})
         
-    pbfs_panu_ch = [PBFPANSTAR.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}), "pbfstar.pan.uni"]
-    pbfs_pans_ch = [PBFPANSTAR.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}), "pbfstar.pan.ske"]
+    pbfs_panu_ch = PBFPANSTAR.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan, "pbfstar.pan.uni"]})
+    pbfs_pans_ch = PBFPANSTAR.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan, "pbfstar.pan.ske"]})
 
-    evaluate_ch = gplas_panu_ch.mix(gplas_pans_ch).mix(pbf_panu_ch).mix(pbf_pans_ch).mix(pbfs_panu_ch).mix(pbfs_pans_ch)
+    evaluate_ch = gplas_panu_ch.mix(gplas_pans_ch, pbf_panu_ch, pbf_pans_ch, pbfs_panu_ch, pbfs_pans_ch)
     EVAL(evaluate_ch)
         
 

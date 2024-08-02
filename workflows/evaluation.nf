@@ -5,11 +5,11 @@ include { PUBLISH } from "./utils.nf"
 workflow EVALUATE {
     take:
     input
-    tool
 
     main:
-    EVAL(input, tool)
-    PUBLISH(EVAL.out.stats)
+    EVAL(input)
+    inpath = Channel.fromPath('${params.input}', type: 'dir')
+    PUBLISH(EVAL.out.stats, inpath)
 
     emit:
     stats = EVAL.out.stats
@@ -19,8 +19,7 @@ workflow EVALUATE {
 process EVAL {
 
     input:
-    tuple val(meta), path(prediction), path(gt)
-    val(tool)
+    tuple val(meta), path(prediction), path(gt), val(tool)
 
     output:
     tuple val(meta), path(stats), emit: stats
