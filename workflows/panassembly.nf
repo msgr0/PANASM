@@ -36,8 +36,8 @@ process PREPROCESS {
         cp ${uni_orig} ${uni_trim}
         cp ${ske_orig} ${ske_trim}
     else
-        python $projectDir/bin/remove_nodes.py -i ${uni_orig} -o ${uni_trim} -t ${meta.thr} -v 2
-        python $projectDir/bin/remove_nodes.py -i ${ske_orig} -o ${ske_trim} -t ${meta.thr} -v 2
+        python $projectDir/bin/remove_nodes.py -v 2 -i ${uni_orig} -o ${uni_trim} -t ${meta.thr} 
+        python $projectDir/bin/remove_nodes.py -v 2 -i ${ske_orig} -o ${ske_trim} -t ${meta.thr} -v 2
         # python $projectDir/bin/cedric/filter_GFA.py ${uni_orig} ${meta.thr} ${uni_trim}
         # python $projectDir/bin/cedric/filter_GFA.py ${ske_orig} ${meta.thr} ${ske_trim}
     fi

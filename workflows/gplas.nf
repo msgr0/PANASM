@@ -22,15 +22,15 @@ process GPLASPAN {
     images = "results/${meta.id}.pasm_plasmidome_network.png"
     res = "${meta.id}.pasm.gplas.pred.tab"
 
+    // python $projectDir/bin/remove_nodes.py -i ${slim_graph} -o ${cut_graph} --thr ${meta.thr}
     """
     #!/bin/bash
 
     python $projectDir/bin/easy-pangenome.py --input ${gfa} --output ${slim_graph}
-    python $projectDir/bin/remove_nodes.py -i ${slim_graph} -o ${cut_graph} --thr ${meta.thr}
 
     python $projectDir/bin/mlpl.asmtopan.py --pred ${pred} --graph ${gfa} --output ${gplas_pred} --thr ${meta.thr}
 
-    gplas -c predict -i ${cut_graph} -P ${gplas_pred} -n ${meta.id}.pasm
+    gplas -c predict -i ${slim_graph} -P ${gplas_pred} -n ${meta.id}.pasm
 
     python $projectDir/bin/evaluation/transform_gplas_pred.py --input ${bins} --gfa ${gfa} --output ${res} 
 
