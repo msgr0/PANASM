@@ -9,13 +9,13 @@ include { DOWNLOAD_GT } from "./workflows/groundtruth.nf"
 include { BUILD_GT    } from "./workflows/groundtruth.nf"
 // 3. GENERATE the preliminary prediction with MLPLASMIDS  
 
-// include { MLPLASMIDS } from "./workflows/mlplasmids.nf"
-// // 4. RUN the following tools
-// //     a. GPLAS
-// include { GPLASPAN; GPLASUNI; GPLASSKE  } from "./workflows/gplas.nf"
-// //     b. PBF
-// //     c. PBF pangenome (only on pangenome graphs)
-// include { PBFPANSTAR; PBFPAN; PBF as PBFUNI; PBF as PBFSKE } from "./workflows/pbf.nf"
+include { MLPLASMIDS } from "./workflows/mlplasmids.nf"
+// 4. RUN the following tools
+//     a. GPLAS
+include { GPLASPAN; GPLASUNI; GPLASSKE  } from "./workflows/gplas.nf"
+//     b. PBF
+//     c. PBF pangenome (only on pangenome graphs)
+include { PBFPANSTAR; PBFPAN; PBF as PBFUNI; PBF as PBFSKE } from "./workflows/pbf.nf"
 
 // include { EVALUATE as EVAL1 } from "./workflows/evaluation.nf"
 // include { EVALUATE as EVAL2 } from "./workflows/evaluation.nf"
@@ -66,18 +66,38 @@ workflow {
     */
     reference_ch | view
 
-    if (params.pangenome) {
-        input_ch | PANASSEMBLY
-        panassembly_ch = PANASSEMBLY.out.panassembly
 
-        mixed_fasta_ch = PANASSEMBLY.out.mixed_fasta
-        assembly_ch = PANASSEMBLY.out.assembly_graphs
-        assembly_fa_ch = PANASSEMBLY.out.assembly_fasta
+    input_ch | PANASSEMBLY
+    panassembly_ch = PANASSEMBLY.out.panassembly
 
-        ground_truth_ch = BUILD_GT(panassembly_ch.join(mixed_fasta_ch.map{id, fa, fagz -> [id, fa]}).join(assembly_fa_ch), reference_ch)
+    mixed_fasta_ch = PANASSEMBLY.out.mixed_fasta
+    assembly_ch = PANASSEMBLY.out.assembly_graphs
+    assembly_fa_ch = PANASSEMBLY.out.assembly_fasta
 
-    }
+    ground_truth_ch = BUILD_GT(panassembly_ch.join(mixed_fasta_ch.map{id, fa, fagz -> [id, fa]}).join(assembly_fa_ch), reference_ch)
 
+    MLPLASMIDS(mixed_fasta_ch.map{id, fa, fagz -> [id, fa]}.join(assembly_fa_ch)) // each sample at a certain threshold will have his prediction done here
+        // MLPLASMIDS.out.mixed | PUBLISH
+
+    GPLASPAN(pasm_ch.join(MLPLASMIDS.out.mixed))
+    PBFPAN(pasm_ch.join(MLPLASMIDS.out.mixed)) 
+    PBFPANSTAR(pasm_ch.join(MLPLASMIDS.out.mixed)) 
+
+    gplas_panu_ch = [GPLASPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}), "gplas.pan.uni"]
+    gplas_pans_ch = [GPLASPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}), "gplas.pan.ske"]
+    
+    pbf_panu_ch = [PBFPAN.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}), "pbf.pan.uni"]
+    pbf_pans_ch = [PBFPAN.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}), "pbf.pan.ske"]
+        
+    pbfs_panu_ch = [PBFPANSTAR.out.res.join(BUILD_GT.out.pan_uni.map{id, pan, uni -> [id, pan]}), "pbfstar.pan.uni"]
+    pbfs_pans_ch = [PBFPANSTAR.out.res.join(BUILD_GT.out.pan_ske.map{id, pan, ske -> [id, pan]}), "pbfstar.pan.ske"]
+
+    evaluate_ch = gplas_panu_ch.mix(gplas_pans_ch).mix(pbf_panu_ch).mix(pbf_pans_ch).mix(pbfs_panu_ch).mix(pbfs_pans_ch)
+    EVAL1(evaluate_ch)
+        
+
+
+        
 }
 
 
