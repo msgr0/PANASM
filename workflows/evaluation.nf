@@ -1,6 +1,5 @@
 #!/usr/bin/env nextflow
 
-include { PUBLISH } from "./utils.nf"
 
 workflow EVALUATE {
     take:
@@ -9,7 +8,7 @@ workflow EVALUATE {
     main:
     EVAL(input)
     inpath = Channel.fromPath('${params.input}', type: 'dir')
-    
+
     emit:
     stats = EVAL.out.stats
 

@@ -18,7 +18,7 @@ include { GPLASPAN; GPLASUNI; GPLASSKE  } from "./workflows/gplas.nf"
 include { PBFPANSTAR; PBFPAN; PBF as PBFUNI; PBF as PBFSKE } from "./workflows/pbf.nf"
 
 include { EVALUATE as EVAL } from "./workflows/evaluation.nf"
-include { PUBLISH } from "./workflows/utils.nf"
+include { PUBLISH } from "./workflows/utils.nf" 
 
 
 
